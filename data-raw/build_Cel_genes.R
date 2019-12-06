@@ -12,5 +12,5 @@ Cel_genes <- biomaRt::getBM(attributes = c("ensembl_gene_id",        # WB gene i
 colnames(Cel_genes) <- c("wb_id", "transcript_name", "public_name", "transcript_length")
 
 # save object to data
-save('Cel_genes', file = "../data/Cel_genes.RData")
+save('Cel_genes', file = "data/Cel_genes.RData")
 rm(mart, Cel_genes)
