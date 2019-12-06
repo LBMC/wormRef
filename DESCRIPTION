@@ -1,0 +1,23 @@
+Package: wormRef
+Title: wormRef is a data package that holds the nematode reference data for the wormAge package
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Romain",
+           family = "Bulteau",
+           role = c("aut", "cre"),
+           email = "romain.bulteau@ens-lyon.fr",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: wormRef is a data package that holds the nematode reference data for the wormAge package. 
+This corresponds to C. elegans embryonic, larval and young adult development. 
+The package also holds the `prep_x` functions, internally called by the wormAge package for interpolation.
+Depends: 
+  R (>= 3.4.0),
+Imports:
+  wormAge
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests:
+  Biobase,
+  GEOquery,
+  biomaRt
