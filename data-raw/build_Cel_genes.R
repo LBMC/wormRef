@@ -1,6 +1,6 @@
 requireNamespace('biomaRt', quietly = T)
 
-# get gene length info from the biomart
+# get gene ids and length info from the biomart
 mart <- biomaRt::useMart("ensembl", dataset = "celegans_gene_ensembl", version = "Ensembl Genes 98")
 
 Cel_genes <- biomaRt::getBM(attributes = c("ensembl_gene_id",        # WB gene ids
