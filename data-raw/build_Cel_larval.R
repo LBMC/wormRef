@@ -1,4 +1,4 @@
-sapply(c("GEOquery", "limma", "Biobase", "utils", "wormAge"), 
+sapply(c("GEOquery", "limma", "Biobase", "utils", "wormAge", "stats"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -17,6 +17,7 @@ X_O <- read.table(gzfile(g_file_O), h=T, sep = '\t', stringsAsFactors = F)
 X_O <- X_O[!duplicated(X_O$GENEID), ] # remove duplicate rows
 rownames(X_O) <- X_O$GENEID
 X_O <- X_O[, -c(1:2)]
+X_O[is.na(X_O)] <- 0
 
 # format ids
 X_O <- wormAge::format_ids(X_O, Cel_genes, from = "sequence_name", to = "wb_id")
@@ -95,8 +96,49 @@ X <- cbind(X[[1]], X[[2]])
 X <- limma::normalizeBetweenArrays(X, method = "quantile")
 X <- log(X + 1)
 
-P <- rbind(P_O[, c("title", "geo_accession", "age", "cov")], P_H[, c("title", "geo_accession", "age", "cov")])
+P <- rbind(P_O[, c("title", "geo_accession", "age", "cov")], 
+           P_H[, c("title", "geo_accession", "age", "cov")])
 
 # formatting
 P$cov <- factor(P$cov, levels = c("O.20", "O.25", "H"))
 P$age_ini <- P$age
+
+
+# build temp 20C reference
+sO20 <- P$cov == "O.20"
+rO20 <- wormAge::plsr_interpol(X[, sO20], P$age_ini[sO20], 
+                               df = 10, n.inter = 500)
+
+to_stage <- P$cov == "O.25" | (P$cov == "H" & P$age_ini <= (48/1.5))
+ae_rO20 <- wormAge::estimate.worm_age(X[, to_stage], rO20$interpGE, rO20$time.series,
+                                      nb.cores = 4)
+
+P$age[to_stage] <-  ae_rO20$age.estimates[, 1]
+P$age[sO20] <- P$age_ini[sO20]
+
+# predict age of remaining Hendriks samples
+dat <- P[P$cov == "H", ]
+dat$ae <- NA
+dat$ae[to_stage[(P$cov == "H")]] <- ae_rO20$age.estimates[(P$cov == "H")[to_stage], 1]
+lm_h <- stats::lm(ae ~ age_ini, data = dat)
+
+P$age[!(sO20 | to_stage)] <- stats::predict(lm_h, dat[is.na(dat$ae),])
+
+
+
+colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
+P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
+X <- X[, P$sname]
+
+Cel_larval <- list(g = X,
+                   p = P,
+                   df = 17)
+
+# save object to data
+save('Cel_larval', file = "data/Cel_larval.RData")
+rm(X_O, X_H, X, 
+   P_O, P_H, P,
+   dat, lm_h, 
+   rO20, ae_rO20,
+   sO20, to_stage,
+   Cel_genes, Cel_larval)
