@@ -40,6 +40,7 @@ P_H$age <- as.numeric(gsub('(\\d+)\\s*-*.*', '\\1', as.character(P_H$description
 P_H$age[1:2] <- c(-50,-30)
 
 P_H$title[1:2] <- paste0('X', P_H$title[1:2])
+P_H$description <- NULL
 
 X_H <- X_H[, P_H$title]
 
@@ -82,3 +83,41 @@ if(file.exists(g_file_L))
   file.remove(g_file_L)
 rm(raw2rpkm, g_url_H, g_url_L, g_file_H, g_file_L, geo_id_H, geo_id_L)
 
+
+
+### build Cel_embryo object
+
+# filter bad Levin samples
+ccl <- wormAge::cor.gene_expr(X_L, X_L)
+f_lev <- which(0.6 > apply(ccl, 1, quantile, probs = .99))
+
+# join datasets
+X <- wormAge::format_to_ref(X_H, X_L[, -f_lev])
+X <- cbind(X[[1]], X[[2]])
+
+X <- limma::normalizeBetweenArrays(X, method = "quantile")
+X <- log(X + 1)
+
+
+P_H$cov <- "H"
+P_L$cov <- "L"
+
+P <- rbind(P_H, P_L[-f_lev, ])
+
+# formatting
+P$cov <- factor(P$cov, levels = c("H", "L"))
+P$age_ini <- P$age
+colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
+P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
+X <- X[, P$sname]
+
+Cel_embryo <- list(g = X,
+                   p = P,
+                   df = 19)
+
+# save object to data
+save('Cel_embryo', file = "data/Cel_embryo.RData")
+rm(X_H, X_L, X, 
+   P_H, P_L, P,
+   ccl, f_lev,
+   Cel_genes, Cel_embryo)
