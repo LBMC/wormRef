@@ -97,8 +97,7 @@ ae_N2 <-  wormAge::estimate.worm_age(X, rN2$interpGE, rN2$time.series, nb.cores 
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
 
-
-colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
+P$accession <- "E-MTAB-7573"
 P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
