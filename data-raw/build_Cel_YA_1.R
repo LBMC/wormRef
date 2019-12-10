@@ -80,17 +80,37 @@ r_larv <- wormAge::plsr_interpol(Cel_larval$g, Cel_larval$p$age,
 sN2 <- P$strain == "N2"
 to_stage <- sN2 & P$age_ini < max(r_larv$time.series)
 
-ae_young_n2 <- wormAge::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
+ae_young_N2 <- wormAge::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
                                          nb.cores = 3)
 
 # adjust the age of the N2 samples
-dat <- cbind(P[to_stage,], aeN2 = ae_young_n2$age.estimates[,1])
-lm_n2 <- lm(aeN2 ~ age_ini, data = dat)
+dat <- cbind(P[to_stage,], aeN2 = ae_young_N2$age.estimates[,1])
+lm_N2 <- lm(aeN2 ~ age_ini, data = dat)
 
-P$age <- predict(lm_n2, P)
-P$age[to_stage] <- ae_young_n2$age.estimates[,1]
+P$age <- predict(lm_N2, P)
+P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
-# build temp N2 reference
-
-rN2 <- wormAge::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 3, covar = P$infect[sN2], 
+# build temp N2 reference and stage all samples
+rN2 <- wormAge::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
                               topred = 'NI', n.inter = 200)
+ae_N2 <-  wormAge::estimate.worm_age(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
+
+P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
+
+
+colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
+P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
+X <- X[, P$sname]
+
+Cel_YA_1 <- list(g = X,
+                 p = P,
+                 df = 5)
+
+# save object to data
+save('Cel_YA_1', file = "data/Cel_YA_1.RData")
+rm(X, P,
+   sN2, to_stage,
+   ae_young_N2, ae_N2, 
+   rN2, lm_N2, 
+   r_larv, dat,
+   Cel_larval, Cel_YA_1)
