@@ -19,7 +19,15 @@
 #'         \item{age}{Sample developmental age. May be scaled to join multiple datasets.}
 #'         \item{cov}{A factor separating the samples into groups if needed (*e.g* multiple datasets, batches); else NULL.}
 #'         \item{age_ini}{Sample chronological age, as given in the literature.}
-#'         \item{accesion}{Sample accession ID for GEO/ArrayExpress.}
+#'         \item{accession}{Sample accession ID for GEO/ArrayExpress.}
 #'     }}
 #'     \item{df}{The degree of freedom to use for the PLSR interpolation model.}
 #' }
+#' 
+#' @source \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50548}{GSE50548} 
+#' \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
+#' 
+#' @references 
+#' \insertref{hashimshony2015spatiotemporal}{wormRef}
+#' \insertref{levin2016mid}{wormRef}
+"Cel_embryo"
