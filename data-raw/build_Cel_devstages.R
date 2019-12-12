@@ -4,7 +4,7 @@ Cel_larval, 0, 55, hours post-hatching
 Cel_YA_1, 39, 72, hours post-hatching
 Cel_YA_2, 48, 83, hours post-hatching
 "
-devstages_s <-"devstage, tstart, tend, tunit
+devstages_s <-"name, tstart, tend, tunit
 1C, -50, -20, min past 4C
 2C, -20,   0, min past 4C
 4C,   0,  20, min past 4C
