@@ -1,6 +1,6 @@
 Package: wormRef
 Title: wormRef is a data package that holds the nematode reference data for the wormAge package
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person(given = "Romain",
            family = "Bulteau",
