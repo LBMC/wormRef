@@ -17,7 +17,8 @@ The package also holds the `prep_x` functions, internally called by the wormAge 
 Depends: 
   R (>= 3.4.0),
 Imports:
-  wormAge
+  wormAge,
+  Rdpack
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -25,3 +26,4 @@ Suggests:
   Biobase,
   GEOquery,
   biomaRt
+RdMacros: Rdpack
