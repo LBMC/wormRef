@@ -3,39 +3,45 @@
 \docType{data}
 \name{Cel_embryo}
 \alias{Cel_embryo}
-\title{Transcriptomic data from *C. elegans* embryonic samples}
-\format{A list with :
-\describe{
-    \item{g}{The gene expression matrix (genes as rows, samples as columns)}
-    \item{p}{Phenotypic data on the samples, usually :
-    \describe{
-        \item{sname}{The sample names (and colnames of the gene expression matrix).}
-        \item{age}{Sample developmental age. May be scaled to join multiple datasets.}
-        \item{cov}{A factor separating the samples into groups if needed (*e.g* multiple datasets, batches); else NULL.}
-        \item{age_ini}{Sample chronological age, as given in the literature.}
-        \item{accession}{Sample accession ID for GEO/ArrayExpress.}
-    }}
-    \item{df}{The degree of freedom to use for the PLSR interpolation model.}
-}}
+\title{Cel_embryo}
+\format{An object of class \code{list} of length 3.}
 \source{
-\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50548}{GSE50548} 
+\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50548}{GSE50548}
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
 }
 \usage{
 Cel_embryo
 }
 \description{
-Two time series are included in this dataset.
-\describe{
-    \item{H}{Hashimshony, et al.  (2015)}
-    \item{L}{Levin, et al.  (2016)}
-}
+Transcriptomic data from \emph{C. elegans} embryonic samples.
 }
 \details{
+Two time series are included in this dataset.
+\itemize{
+\item \code{H}: \insertCite{hashimshony2015spatiotemporal}{wormRef}
+\item \code{L}: \insertCite{levin2016mid}{wormRef}
+}
+
 The gene expression matrix is \eqn{log(X + 1)} of quantile-normalized raw data.
 }
+\section{Format }{
+
+A list with :
+\itemize{
+\item \verb{$g}: The gene expression matrix (genes as rows, samples as columns)
+\item \verb{$p}: A dataframe of phenotypic data on the samples, usually :
+\itemize{
+\item \code{sname} : The sample names (and colnames of the gene expression matrix).
+\item \code{age} : Sample developmental age. May be scaled to join multiple datasets.
+\item \code{cov} : A factor separating the samples into groups if needed (\emph{e.g} multiple datasets, batches); else NULL.
+\item \code{age_ini} : Sample chronological age, as given in the literature.
+\item \code{accession} : Sample accession ID for GEO/ArrayExpress.
+}
+\item \verb{$df}: The degree of freedom to use for the PLSR interpolation model.
+}
+}
+
 \references{
-\insertref{hashimshony2015spatiotemporal}{wormRef}
-\insertref{levin2016mid}{wormRef}
+\insertAllCited{}
 }
 \keyword{datasets}
