@@ -1,10 +1,12 @@
 #' Build Interpolated Gene Expression Reference
 #' 
-#' Builds the PLSR interpolation of the reference dataset
+#' Builds the PLSR interpolation of the reference dataset.
+#' **These functions are internally called by \code{\link[wormAge]{prepare_refdata}} from wormAge.**
 #' 
 #' @param n.inter passed on to \code{\link[wormAge]{plsr_interpol}}
 #' 
 #' @return The output of \code{\link[wormAge]{plsr_interpol}}
+#' @seealso \code{\link[wormAge]{plsr_interpol}}
 #' 
 #' @name Cel_prep
 NULL

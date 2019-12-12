@@ -23,5 +23,9 @@
 The output of \code{\link[wormAge]{plsr_interpol}}
 }
 \description{
-Builds the PLSR interpolation of the reference dataset
+Builds the PLSR interpolation of the reference dataset.
+\strong{These functions are internally called by \code{\link[wormAge]{prepare_refdata}} from wormAge.}
+}
+\seealso{
+\code{\link[wormAge]{plsr_interpol}}
 }
