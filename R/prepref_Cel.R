@@ -12,6 +12,7 @@
 NULL
 
 #' @rdname Cel_prep
+#' @export
 #' @importFrom wormAge plsr_interpol
 #' 
 .prepref_Cel_embryo <- function(n.inter){
@@ -26,6 +27,7 @@ NULL
 }
 
 #' @rdname Cel_prep
+#' @export
 #' @importFrom wormAge plsr_interpol
 #'
 .prepref_Cel_larval <- function(n.inter){
@@ -40,6 +42,7 @@ NULL
 }
 
 #' @rdname Cel_prep
+#' @export
 #' @importFrom wormAge plsr_interpol
 #'
 .prepref_Cel_YA_1 <- function(n.inter){
@@ -54,6 +57,7 @@ NULL
 }
 
 #' @rdname Cel_prep
+#' @export
 #' @importFrom wormAge plsr_interpol
 #'
 .prepref_Cel_YA_2 <- function(n.inter){
