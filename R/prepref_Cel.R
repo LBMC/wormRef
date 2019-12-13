@@ -20,10 +20,10 @@ NULL
   utils::data("Cel_embryo", envir = environment())
   return(
     wormAge::plsr_interpol(
-      X = Cel_embryo$g, 
-      time.series = Cel_embryo$p$age, 
-      covar = Cel_embryo$p$cov, 
-      df = Cel_embryo$df,
+      X = wormRef::Cel_embryo$g, 
+      time.series = wormRef::Cel_embryo$p$age, 
+      covar = wormRef::Cel_embryo$p$cov, 
+      df = wormRef::Cel_embryo$df,
       n.inter = n.inter)
     )
 }
@@ -37,10 +37,10 @@ NULL
   utils::data("Cel_larval", envir = environment())
   return(
     wormAge::plsr_interpol(
-      X = Cel_larval$g, 
-      time.series = Cel_larval$p$age, 
-      covar = Cel_larval$p$cov, 
-      df = Cel_larval$df,
+      X = wormRef::Cel_larval$g, 
+      time.series = wormRef::Cel_larval$p$age, 
+      covar = wormRef::Cel_larval$p$cov, 
+      df = wormRef::Cel_larval$df,
       n.inter = n.inter)
   )
 }
@@ -54,10 +54,10 @@ NULL
   utils::data("Cel_YA_1", envir = environment())
   return(
     wormAge::plsr_interpol(
-      X = Cel_YA_1$g, 
-      time.series = Cel_YA_1$p$age, 
-      covar = Cel_YA_1$p$cov, 
-      df = Cel_YA_1$df,
+      X = wormRef::Cel_YA_1$g, 
+      time.series = wormRef::Cel_YA_1$p$age, 
+      covar = wormRef::Cel_YA_1$p$cov, 
+      df = wormRef::Cel_YA_1$df,
       n.inter = n.inter)
   )
 }
@@ -71,10 +71,10 @@ NULL
   utils::data("Cel_YA_2", envir = environment())
   return(
     wormAge::plsr_interpol(
-      X = Cel_YA_2$g, 
-      time.series = Cel_YA_2$p$age, 
-      covar = Cel_YA_2$p$cov, 
-      df = Cel_YA_2$df,
+      X = wormRef::Cel_YA_2$g, 
+      time.series = wormRef::Cel_YA_2$p$age, 
+      covar = wormRef::Cel_YA_2$p$cov, 
+      df = wormRef::Cel_YA_2$df,
       n.inter = n.inter,
       tmin = 48) # because of bad quality
   )
