@@ -1,6 +1,6 @@
 Package: wormRef
 Title: Nematode Reference Data For The wormAge Package
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(
   person("Romain", "Bulteau", email = "romain.bulteau@ens-lyon.fr",
     role = c("aut", "cre")),
@@ -20,7 +20,8 @@ LazyData: true
 Suggests:
   Biobase,
   GEOquery,
-  biomaRt
+  biomaRt,
+  ggplot2
 RdMacros: Rdpack
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
