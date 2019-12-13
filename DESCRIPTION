@@ -1,6 +1,6 @@
 Package: wormRef
 Title: Nematode Reference Data For The wormAge Package
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Romain", "Bulteau", email = "romain.bulteau@ens-lyon.fr",
     role = c("aut", "cre")),
@@ -13,7 +13,8 @@ Depends:
   R (>= 3.4.0)
 Imports:
   wormAge,
-  Rdpack
+  Rdpack,
+  utils
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
