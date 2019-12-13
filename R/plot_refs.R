@@ -1,4 +1,14 @@
-
+#' Plot Reference Timelines
+#' 
+#' Plots the coverage of the `wormRef` references (requires ggplot2)
+#' 
+#' @examples 
+#' \donttest{
+#' plot_refs_Cel()
+#' }
+#' 
+#' @export
+#' 
 plot_refs_Cel <- function(){
   if(!requireNamespace("ggplot2")){
     message("Install ggplot2 to see this graph !")
