@@ -17,7 +17,7 @@ NULL
 #' @importFrom utils data
 #' 
 .prepref_Cel_embryo <- function(n.inter){
-  utils::data("Cel_embryo", envir = environment())
+  # utils::data("Cel_embryo", envir = environment())
   return(
     wormAge::plsr_interpol(
       X = wormRef::Cel_embryo$g, 
@@ -34,7 +34,7 @@ NULL
 #' @importFrom utils data
 #'
 .prepref_Cel_larval <- function(n.inter){
-  utils::data("Cel_larval", envir = environment())
+  # utils::data("Cel_larval", envir = environment())
   return(
     wormAge::plsr_interpol(
       X = wormRef::Cel_larval$g, 
@@ -51,7 +51,7 @@ NULL
 #' @importFrom utils data
 #'
 .prepref_Cel_YA_1 <- function(n.inter){
-  utils::data("Cel_YA_1", envir = environment())
+  # utils::data("Cel_YA_1", envir = environment())
   return(
     wormAge::plsr_interpol(
       X = wormRef::Cel_YA_1$g, 
@@ -68,7 +68,7 @@ NULL
 #' @importFrom utils data
 #'
 .prepref_Cel_YA_2 <- function(n.inter){
-  utils::data("Cel_YA_2", envir = environment())
+  # utils::data("Cel_YA_2", envir = environment())
   return(
     wormAge::plsr_interpol(
       X = wormRef::Cel_YA_2$g, 
