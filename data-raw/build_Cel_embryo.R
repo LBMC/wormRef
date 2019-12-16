@@ -1,4 +1,4 @@
-sapply(c("GEOquery", "limma", "Biobase", "utils", "wormAge"), 
+sapply(c("GEOquery", "limma", "Biobase", "utils", "RAPToR"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -17,7 +17,7 @@ utils::download.file(url = as.character(g_url_H$url[2]), destfile = g_file_H)
 X_H <- read.table(gzfile(g_file_H), h=T, sep = '\t', stringsAsFactors = F, row.names = 1)
 
 # convert to rpkm & wb_id
-X_H <- wormAge::format_ids(X_H, Cel_genes, from = "sequence_name", to = "wb_id")
+X_H <- RAPToR::format_ids(X_H, Cel_genes, from = "sequence_name", to = "wb_id")
 X_H <- raw2rpkm(X = X_H, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
 
 
@@ -56,7 +56,7 @@ utils::download.file(url = as.character(g_url_L$url[1]), destfile = g_file_L)
 X_L <- read.table(gzfile(g_file_L), header = T, row.names = 1, sep = "\t")
 
 # convert to rpkm & wb_id
-X_L <- wormAge::format_ids(X_L, Cel_genes, from = "sequence_name", to = "wb_id")
+X_L <- RAPToR::format_ids(X_L, Cel_genes, from = "sequence_name", to = "wb_id")
 X_L <- raw2rpkm(X = X_L, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
 
 
@@ -88,11 +88,11 @@ rm(raw2rpkm, g_url_H, g_url_L, g_file_H, g_file_L, geo_id_H, geo_id_L)
 ### build Cel_embryo object
 
 # filter bad Levin samples
-ccl <- wormAge::cor.gene_expr(X_L, X_L)
+ccl <- RAPToR::cor.gene_expr(X_L, X_L)
 f_lev <- which(0.6 > apply(ccl, 1, quantile, probs = .99))
 
 # join datasets
-X <- wormAge::format_to_ref(X_H, X_L[, -f_lev])
+X <- RAPToR::format_to_ref(X_H, X_L[, -f_lev])
 X <- cbind(X[[1]], X[[2]])
 
 X <- limma::normalizeBetweenArrays(X, method = "quantile")

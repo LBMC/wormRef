@@ -17,15 +17,15 @@
 .prepref_Cel_YA_2(n.inter)
 }
 \arguments{
-\item{n.inter}{passed on to \code{\link[wormAge]{plsr_interpol}}}
+\item{n.inter}{passed on to \code{\link[RAPToR]{plsr_interpol}}}
 }
 \value{
-The output of \code{\link[wormAge]{plsr_interpol}}
+The output of \code{\link[RAPToR]{plsr_interpol}}
 }
 \description{
 Builds the PLSR interpolation of the reference dataset.
-\strong{These functions are internally called by \code{\link[wormAge]{prepare_refdata}} from wormAge.}
+\strong{These functions are internally called by \code{\link[RAPToR]{prepare_refdata}} from RAPToR.}
 }
 \seealso{
-\code{\link[wormAge]{plsr_interpol}}
+\code{\link[RAPToR]{plsr_interpol}}
 }

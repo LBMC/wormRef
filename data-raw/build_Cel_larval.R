@@ -1,4 +1,4 @@
-sapply(c("GEOquery", "limma", "Biobase", "utils", "wormAge", "stats"), 
+sapply(c("GEOquery", "limma", "Biobase", "utils", "RAPToR", "stats"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -20,7 +20,7 @@ X_O <- X_O[, -c(1:2)]
 X_O[is.na(X_O)] <- 0
 
 # format ids
-X_O <- wormAge::format_ids(X_O, Cel_genes, from = "sequence_name", to = "wb_id")
+X_O <- RAPToR::format_ids(X_O, Cel_genes, from = "sequence_name", to = "wb_id")
 
 
 # pheno Data
@@ -53,7 +53,7 @@ utils::download.file(url = as.character(g_url_H$url[2]), destfile = g_file_H)
 X_H <- read.table(gzfile(g_file_H), h=T, sep = '\t', stringsAsFactors = F, row.names = 1)
 
 # convert to rpkm & wb_id
-X_H <- wormAge::format_ids(X_H, Cel_genes, from = "wb_id", to = "wb_id")
+X_H <- RAPToR::format_ids(X_H, Cel_genes, from = "wb_id", to = "wb_id")
 X_H <- raw2rpkm(X = X_H, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
 
 
@@ -90,7 +90,7 @@ rm(raw2rpkm, g_url_O, g_url_H, g_file_O, g_file_H, geo_id_O, geo_id_H)
 ### build Cel_larval
 
 # join datasets
-X <- wormAge::format_to_ref(X_O, X_H)
+X <- RAPToR::format_to_ref(X_O, X_H)
 X <- cbind(X[[1]], X[[2]])
 
 X <- limma::normalizeBetweenArrays(X, method = "quantile")
@@ -106,11 +106,11 @@ P$age_ini <- P$age
 
 # build temp 20C reference
 sO20 <- P$cov == "O.20"
-rO20 <- wormAge::plsr_interpol(X[, sO20], P$age_ini[sO20], 
+rO20 <- RAPToR::plsr_interpol(X[, sO20], P$age_ini[sO20], 
                                df = 10, n.inter = 500)
 
 to_stage <- P$cov == "O.25" | (P$cov == "H" & P$age_ini <= (48/1.5))
-ae_rO20 <- wormAge::estimate.worm_age(X[, to_stage], rO20$interpGE, rO20$time.series,
+ae_rO20 <- RAPToR::estimate.worm_age(X[, to_stage], rO20$interpGE, rO20$time.series,
                                       nb.cores = 4)
 
 P$age[to_stage] <-  ae_rO20$age.estimates[, 1]

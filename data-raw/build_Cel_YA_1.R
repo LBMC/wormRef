@@ -1,4 +1,4 @@
-sapply(c("curl", "limma", "Biobase", "utils", "wormAge", "stats"), 
+sapply(c("curl", "limma", "Biobase", "utils", "RAPToR", "stats"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -38,7 +38,7 @@ Xa <- stats::aggregate(X[-ctrl_probes, ], by = list(RG$genes$SystematicName[-ctr
 X <- Xa[, -1]
 rownames(X) <- as.character(Xa[,1])
 
-X <- wormAge::format_ids(X, Cel_genes, from = "sequence_name", to = "wb_id")
+X <- RAPToR::format_ids(X, Cel_genes, from = "sequence_name", to = "wb_id")
 rm(Xa, RG)
 
 # pheno data
@@ -73,14 +73,14 @@ X <- log(X + 1)
 
 # stage early N2 samples
 load("data/Cel_larval.RData")
-r_larv <- wormAge::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
+r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
                                  df = Cel_larval$df, covar = Cel_larval$p$cov, 
                                  topred = "O.20", n.inter = 500)
 
 sN2 <- P$strain == "N2"
 to_stage <- sN2 & P$age_ini < max(r_larv$time.series)
 
-ae_young_N2 <- wormAge::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
+ae_young_N2 <- RAPToR::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
                                          nb.cores = 3)
 
 # adjust the age of the N2 samples
@@ -91,9 +91,9 @@ P$age <- predict(lm_N2, P)
 P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
 # build temp N2 reference and stage all samples
-rN2 <- wormAge::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
+rN2 <- RAPToR::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
                               topred = 'NI', n.inter = 200)
-ae_N2 <-  wormAge::estimate.worm_age(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
+ae_N2 <-  RAPToR::estimate.worm_age(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
 

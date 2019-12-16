@@ -1,4 +1,4 @@
-sapply(c("GEOquery", "limma", "Biobase", "utils", "wormAge", "stats"), 
+sapply(c("GEOquery", "limma", "Biobase", "utils", "RAPToR", "stats"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -42,7 +42,7 @@ rownames(gpl) <- as.character(gpl$ID)
 
 rownames(X) <- gpl[probe_ids, "ORF"]
 
-X <- wormAge::format_ids(X, Cel_genes, from = "sequence_name", to = "wb_id")
+X <- RAPToR::format_ids(X, Cel_genes, from = "sequence_name", to = "wb_id")
 
 X <- X[, P$geo_accession]
 
@@ -54,12 +54,12 @@ X <- log(X + 1)
 
 # adjust ages to 20C development from hatching
 load("data/Cel_larval.RData")
-r_larv <- wormAge::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
+r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
                                  df = Cel_larval$df, covar = Cel_larval$p$cov, 
                                  topred = "O.20", n.inter = 500)
 
 to_stage <- (35 + P$age_ini * 1.5) < max(r_larv$time.series)
-ae_young <- wormAge::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
+ae_young <- RAPToR::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
                                        nb.cores = 3)
 
 dat <- cbind(P[to_stage,], ae = ae_young$age.estimates[,1])
