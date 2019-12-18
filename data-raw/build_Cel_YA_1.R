@@ -75,6 +75,7 @@ X <- log(X + 1)
 load("data/Cel_larval.RData")
 r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
                                 df = Cel_larval$df, covar = Cel_larval$p$cov, 
+                                plsr.nc = Cel_larval$nc,
                                 topred = "O.20", n.inter = 500)
 
 sN2 <- P$strain == "N2"
@@ -92,7 +93,7 @@ P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
 # build temp N2 reference and stage all samples
 rN2 <- RAPToR::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
-                             topred = 'NI', n.inter = 200)
+                             plsr.nc = 3, topred = 'NI', n.inter = 200)
 ae_N2 <-  RAPToR::ae(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]

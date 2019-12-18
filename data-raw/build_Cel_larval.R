@@ -107,7 +107,7 @@ P$age_ini <- P$age
 # build temp 20C reference
 sO20 <- P$cov == "O.20"
 rO20 <- RAPToR::plsr_interpol(X[, sO20], P$age_ini[sO20], 
-                              df = 10, n.inter = 500)
+                              df = 10, plsr.nc = 10, n.inter = 500)
 
 to_stage <- P$cov == "O.25" | (P$cov == "H" & P$age_ini <= (48/1.5))
 ae_rO20 <- RAPToR::ae(X[, to_stage], rO20$interpGE, rO20$time.series,

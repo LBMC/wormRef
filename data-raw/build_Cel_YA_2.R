@@ -55,8 +55,9 @@ X <- log(X + 1)
 # adjust ages to 20C development from hatching
 load("data/Cel_larval.RData")
 r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
-                                 df = Cel_larval$df, covar = Cel_larval$p$cov, 
-                                 topred = "O.20", n.inter = 500)
+                                df = Cel_larval$df, covar = Cel_larval$p$cov, 
+                                plsr.nc = Cel_larval$nc,
+                                topred = "O.20", n.inter = 500)
 
 to_stage <- (35 + P$age_ini * 1.5) < max(r_larv$time.series)
 ae_young <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
