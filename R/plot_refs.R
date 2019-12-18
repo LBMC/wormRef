@@ -14,7 +14,7 @@ plot_refs_Cel <- function(){
   if(!requireNamespace("ggplot2")){
     message("Install ggplot2 to see this graph !")
   }
-  utils::data("Cel_devstages", envir = environment())
+  # utils::data("Cel_devstages", envir = environment())
   dat <- wormRef::Cel_devstages
   lbs <- data.frame(tunit=unique(dat$devstages$tunit), lab = c("Embryo", "Post-Hatching"))
   
