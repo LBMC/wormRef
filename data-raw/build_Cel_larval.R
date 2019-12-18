@@ -107,11 +107,11 @@ P$age_ini <- P$age
 # build temp 20C reference
 sO20 <- P$cov == "O.20"
 rO20 <- RAPToR::plsr_interpol(X[, sO20], P$age_ini[sO20], 
-                               df = 10, n.inter = 500)
+                              df = 10, n.inter = 500)
 
 to_stage <- P$cov == "O.25" | (P$cov == "H" & P$age_ini <= (48/1.5))
-ae_rO20 <- RAPToR::estimate.worm_age(X[, to_stage], rO20$interpGE, rO20$time.series,
-                                      nb.cores = 4)
+ae_rO20 <- RAPToR::ae(X[, to_stage], rO20$interpGE, rO20$time.series,
+                      nb.cores = 4)
 
 P$age[to_stage] <-  ae_rO20$age.estimates[, 1]
 P$age[sO20] <- P$age_ini[sO20]
@@ -132,7 +132,8 @@ X <- X[, P$sname]
 
 Cel_larval <- list(g = X,
                    p = P,
-                   df = 17)
+                   df = 17,
+                   nc = 16)
 
 # save object to data
 save('Cel_larval', file = "data/Cel_larval.RData")

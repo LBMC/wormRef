@@ -113,7 +113,8 @@ X <- X[, P$sname]
 
 Cel_embryo <- list(g = X,
                    p = P,
-                   df = 19)
+                   df = 19,
+                   nc = 20)
 
 # save object to data
 save('Cel_embryo', file = "data/Cel_embryo.RData")

@@ -74,14 +74,14 @@ X <- log(X + 1)
 # stage early N2 samples
 load("data/Cel_larval.RData")
 r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
-                                 df = Cel_larval$df, covar = Cel_larval$p$cov, 
-                                 topred = "O.20", n.inter = 500)
+                                df = Cel_larval$df, covar = Cel_larval$p$cov, 
+                                topred = "O.20", n.inter = 500)
 
 sN2 <- P$strain == "N2"
 to_stage <- sN2 & P$age_ini < max(r_larv$time.series)
 
-ae_young_N2 <- RAPToR::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
-                                         nb.cores = 3)
+ae_young_N2 <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
+                          nb.cores = 3)
 
 # adjust the age of the N2 samples
 dat <- cbind(P[to_stage,], aeN2 = ae_young_N2$age.estimates[,1])
@@ -92,8 +92,8 @@ P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
 # build temp N2 reference and stage all samples
 rN2 <- RAPToR::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
-                              topred = 'NI', n.inter = 200)
-ae_N2 <-  RAPToR::estimate.worm_age(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
+                             topred = 'NI', n.inter = 200)
+ae_N2 <-  RAPToR::ae(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
 
@@ -103,7 +103,8 @@ X <- X[, P$sname]
 
 Cel_YA_1 <- list(g = X,
                  p = P,
-                 df = 5)
+                 df = 5,
+                 nc = 8)
 
 # save object to data
 save('Cel_YA_1', file = "data/Cel_YA_1.RData")

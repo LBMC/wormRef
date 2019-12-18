@@ -59,8 +59,8 @@ r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age,
                                  topred = "O.20", n.inter = 500)
 
 to_stage <- (35 + P$age_ini * 1.5) < max(r_larv$time.series)
-ae_young <- RAPToR::estimate.worm_age(X[,to_stage], r_larv$interpGE, r_larv$time.series,
-                                       nb.cores = 3)
+ae_young <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
+                       nb.cores = 3)
 
 dat <- cbind(P[to_stage,], ae = ae_young$age.estimates[,1])
 lm_r <- lm(ae ~ age_ini + cov, data = dat)
@@ -78,7 +78,8 @@ X <- X[, P$sname]
 
 Cel_YA_2 <- list(g = X,
                  p = P,
-                 df = 8)
+                 df = 8,
+                 nc = 3)
 
 # save object to data
 save('Cel_YA_2', file = "data/Cel_YA_2.RData")
