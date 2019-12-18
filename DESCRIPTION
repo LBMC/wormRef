@@ -1,6 +1,6 @@
 Package: wormRef
 Title: Nematode Reference Data For The RAPToR Package
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
   person("Romain", "Bulteau", email = "romain.bulteau@ens-lyon.fr",
     role = c("aut", "cre")),
