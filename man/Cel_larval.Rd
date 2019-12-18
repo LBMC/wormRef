@@ -4,7 +4,7 @@
 \name{Cel_larval}
 \alias{Cel_larval}
 \title{Cel_larval}
-\format{An object of class \code{list} of length 3.}
+\format{An object of class \code{list} of length 4.}
 \source{
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49043}{GSE49043}
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52861}{GSE52861}
@@ -39,6 +39,7 @@ A list with :
 \item \code{accession} : Sample accession ID for GEO/ArrayExpress.
 }
 \item \verb{$df}: The degree of freedom to use for the PLSR interpolation model.
+\item \verb{$nc}: The number of PLS components to use for the prediction of the PLSR interpolation model
 }
 }
 
