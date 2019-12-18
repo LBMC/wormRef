@@ -24,6 +24,7 @@ NULL
       time.series = wormRef::Cel_embryo$p$age, 
       covar = wormRef::Cel_embryo$p$cov, 
       df = wormRef::Cel_embryo$df,
+      plsr.nc = wormRef::Cel_embryo$nc,
       n.inter = n.inter)
     )
 }
@@ -41,6 +42,7 @@ NULL
       time.series = wormRef::Cel_larval$p$age, 
       covar = wormRef::Cel_larval$p$cov, 
       df = wormRef::Cel_larval$df,
+      plsr.nc = wormRef::Cel_larval$nc,
       n.inter = n.inter)
   )
 }
@@ -58,6 +60,7 @@ NULL
       time.series = wormRef::Cel_YA_1$p$age, 
       covar = wormRef::Cel_YA_1$p$cov, 
       df = wormRef::Cel_YA_1$df,
+      plsr.nc = wormRef::Cel_YA_1$nc,
       n.inter = n.inter)
   )
 }
@@ -75,6 +78,7 @@ NULL
       time.series = wormRef::Cel_YA_2$p$age, 
       covar = wormRef::Cel_YA_2$p$cov, 
       df = wormRef::Cel_YA_2$df,
+      plsr.nc = wormRef::Cel_YA_2$nc,
       n.inter = n.inter,
       tmin = 48) # because of bad quality
   )
