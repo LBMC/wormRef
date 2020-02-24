@@ -86,14 +86,19 @@ NULL
 #'
 .prepref_Cel_YA_2 <- function(n.inter){
   # utils::data("Cel_YA_2", envir = environment())
+  m <- RAPToR::ge_im(
+    X = wormRef::Cel_YA_2$g,
+    p = wormRef::Cel_YA_2$p,
+    formula = wormRef::Cel_YA_2$geim_params$formula,
+    method = wormRef::Cel_YA_2$geim_params$method,
+    dim_red = wormRef::Cel_YA_2$geim_params$dim_red,
+    nc = wormRef::Cel_YA_2$geim_params$nc
+  )
+  ndat <- data.frame(age = seq(48, # bc of bad quality
+                               max(wormRef::Cel_YA_2$p$age),
+                               l = n.inter),
+                     cov = rep(wormRef::Cel_YA_2$p$cov[2], n.inter))
   return(
-    RAPToR::plsr_interpol(
-      X = wormRef::Cel_YA_2$g, 
-      time.series = wormRef::Cel_YA_2$p$age, 
-      covar = wormRef::Cel_YA_2$p$cov, 
-      df = wormRef::Cel_YA_2$df,
-      plsr.nc = wormRef::Cel_YA_2$nc,
-      n.inter = n.inter,
-      tmin = 48) # because of bad quality
+    list(interpGE = predict(m, ndat), time.series = ndat$age)
   )
 }
