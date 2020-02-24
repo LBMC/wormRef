@@ -106,16 +106,16 @@ P$age_ini <- P$age
 
 # build temp 20C reference
 sO20 <- P$cov == "O.20" & P$title != "DH5_N2_38" # outlier with err. time
-pca <- stats::prcomp(X[, selO20], rank = 20)
+pca <- stats::prcomp(X[, sO20], rank = 20)
 summary(pca)
 
 # select nb of components to use for interpolation
 nc <- sum(summary(pca)$importance[3, ] < .999) + 1
 
 # build geim model and predictions
-m <- ge_im(X = X[, selO20], p = P[selO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
+m <- ge_im(X = X[, sO20], p = P[sO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
            method = "gam", dim_red = "pca", nc = nc)
-ndat <- data.frame(age_ini = seq(min(P[selO20, "age_ini"]), max(P[selO20, "age_ini"]), l = 500))
+ndat <- data.frame(age_ini = seq(min(P[sO20, "age_ini"]), max(P[sO20, "age_ini"]), l = 500))
 r20C <- list(g = predict(m, ndat), ts = ndat$age_ini)
 
 # estimate age of samples
@@ -155,8 +155,6 @@ X <- X[, P$sname]
 
 # Get nc for final reference building
 pca <- stats::prcomp(X, rank = 45)
-summary(pca)
-
 nc <- sum(summary(pca)$importance[3, ] < .999) + 1
 
 
@@ -169,7 +167,7 @@ Cel_larval <- list(g = X,
                    )
 
 # save object to data
-save('Cel_larval', file = "data/Cel_larval.RData")
+save('Cel_larval', file = "data/Cel_larval.RData", compress = "xz")
 rm(X_O, X_H, X, 
    P_O, P_H, P,
    dat, lm_h, 
