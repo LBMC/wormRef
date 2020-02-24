@@ -46,8 +46,8 @@ NULL
     dim_red = wormRef::Cel_larval$geim_params$dim_red,
     nc = wormRef::Cel_larval$geim_params$nc
   )
-  ndat <- data.frame(age = seq(min(wormRef::Cel_larval$p),
-                               max(wormRef::Cel_larval$p),
+  ndat <- data.frame(age = seq(min(wormRef::Cel_larval$p$age),
+                               max(wormRef::Cel_larval$p$age),
                                l = n.inter),
                      cov = rep(wormRef::Cel_larval$p$cov[1], n.inter))
   return(
