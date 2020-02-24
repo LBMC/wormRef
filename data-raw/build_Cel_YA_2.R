@@ -54,14 +54,20 @@ X <- log(X + 1)
 
 # adjust ages to 20C development from hatching
 load("data/Cel_larval.RData")
-r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
-                                df = Cel_larval$df, covar = Cel_larval$p$cov, 
-                                plsr.nc = Cel_larval$nc,
-                                topred = "O.20", n.inter = 500)
+m_larv <- RAPToR::ge_im(X = Cel_larval$g, p = Cel_larval$p, formula = Cel_larval$geim_params$formula,
+                        method = Cel_larval$geim_params$method, dim_red = Cel_larval$geim_params$dim_red,
+                        nc = Cel_larval$geim_params$nc)
+
+ndat <- data.frame(age = seq(min(Cel_larval$p$age), max(Cel_larval$p$age), l = 500),
+                   cov = rep(Cel_larval$p$cov[1], 500))
+
+r_larv <- list(interpGE = predict(m_larv, ndat), time.series = ndat$age)
 
 to_stage <- (35 + P$age_ini * 1.5) < max(r_larv$time.series)
 ae_young <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
-                       nb.cores = 3)
+                       nb.cores = 3, 
+                       prior = (35 + P$age_ini[to_stage] * 1.5), 
+                       prior.params = 10)
 
 dat <- cbind(P[to_stage,], ae = ae_young$age.estimates[,1])
 lm_r <- lm(ae ~ age_ini + cov, data = dat)
@@ -77,18 +83,28 @@ colnames(P) <- c("sname", "n", "age_ini", "cov", "age", "accession")
 P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
+
+# get nc for final reference building
+pca <- stats::prcomp(X, rank = 35)
+nc <- sum(summary(pca)$importance[3, ] < .9) + 1 # only .9 bc of bad quality
+
+
 Cel_YA_2 <- list(g = X,
                  p = P,
-                 df = 8,
-                 nc = 3)
+                 geim_params = list(formula = "X ~ s(age, bs = 'ts') + cov",
+                                    method = "gam",
+                                    dim_red = "pca",
+                                    nc = nc)
+)
 
 # save object to data
-save('Cel_YA_2', file = "data/Cel_YA_2.RData")
+save('Cel_YA_2', file = "data/Cel_YA_2.RData", compress = "xz")
 
 rm(X, P,
    Gs, gpl, geo_ids,
    probe_ids, to_stage,
    ae_young, dat, lm_r, 
-   Cel_larval, r_larv,
+   Cel_larval, r_larv, m_larv, 
+   ndat, pca, nc,
    Cel_YA_2, Cel_genes)
 
