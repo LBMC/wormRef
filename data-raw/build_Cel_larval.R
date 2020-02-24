@@ -105,41 +105,74 @@ P$age_ini <- P$age
 
 
 # build temp 20C reference
-sO20 <- P$cov == "O.20"
-rO20 <- RAPToR::plsr_interpol(X[, sO20], P$age_ini[sO20], 
-                              df = 10, plsr.nc = 10, n.inter = 500)
+sO20 <- P$cov == "O.20" & P$title != "DH5_N2_38" # outlier with err. time
+pca <- stats::prcomp(X[, selO20], rank = 20)
+summary(pca)
 
-to_stage <- P$cov == "O.25" | (P$cov == "H" & P$age_ini <= (48/1.5))
-ae_rO20 <- RAPToR::ae(X[, to_stage], rO20$interpGE, rO20$time.series,
-                      nb.cores = 4)
+# select nb of components to use for interpolation
+nc <- sum(summary(pca)$importance[3, ] < .999) + 1
 
-P$age[to_stage] <-  ae_rO20$age.estimates[, 1]
-P$age[sO20] <- P$age_ini[sO20]
+# build geim model and predictions
+m <- ge_im(X = X[, selO20], p = P[selO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
+           method = "gam", dim_red = "pca", nc = nc)
+ndat <- data.frame(age_ini = seq(min(P[selO20, "age_ini"]), max(P[selO20, "age_ini"]), l = 500))
+r20C <- list(g = predict(m, ndat), ts = ndat$age_ini)
 
-# predict age of remaining Hendriks samples
+# estimate age of samples
+ae_r20 <- ae(X, r20C$g, r20C$ts, bootstrap.n = 1)
+
+# par(mfrow = c(2,2))
+# plot(P$age_ini, ae_r20$age.estimates[,1], 
+#      main = "Chron. vs ae", xlab = "Age", ylab = "ae", 
+#      col = P$cov, lwd = 2)
+# legend("bottomright", bty = 'n', lwd = 3, col = 1:3, legend = levels(P$cov), 
+#        lty = NA, pch = 1, text.font = 2)
+# 
+# invisible(sapply(levels(P$cov), function(l){
+#    s <- which(P$cov == l)
+#    plot(P$age_ini[s], ae_r20$age.estimates[s,1], 
+#         main = paste0("Chron. vs ae (", l, ")"), xlab = "Age", ylab = "ae", 
+#         col = which(l == levels(P$cov)), lwd = 2)
+# }))
+
+# predict age of Hendriks samples outside of rO20 range
 dat <- P[P$cov == "H", ]
 dat$ae <- NA
-dat$ae[to_stage[(P$cov == "H")]] <- ae_rO20$age.estimates[(P$cov == "H")[to_stage], 1]
+H_staged <- dat$age_ini <= (48/1.5)
+dat$ae[H_staged] <- (ae_r20$age.estimates[P$cov == "H", 1])[H_staged]
+
 lm_h <- stats::lm(ae ~ age_ini, data = dat)
 
-P$age[!(sO20 | to_stage)] <- stats::predict(lm_h, dat[is.na(dat$ae),])
+dat$age <- dat$ae
+dat$age[!H_staged] <- stats::predict(lm_h, dat[is.na(dat$ae),])
 
+P$age[P$cov == "H"] <- dat$age
 
 
 colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
 P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
+# Get nc for final reference building
+pca <- stats::prcomp(X, rank = 45)
+summary(pca)
+
+nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+
+
 Cel_larval <- list(g = X,
                    p = P,
-                   df = 17,
-                   nc = 16)
+                   geim_params = list(formula = "X ~ s(age, bs = 'ds') + cov",
+                                      method = "gam",
+                                      dim_red = "pca",
+                                      nc = nc)
+                   )
 
 # save object to data
 save('Cel_larval', file = "data/Cel_larval.RData")
 rm(X_O, X_H, X, 
    P_O, P_H, P,
    dat, lm_h, 
-   rO20, ae_rO20,
-   sO20, to_stage,
+   r20C, ae_r20,
+   sO20, H_staged,
    Cel_genes, Cel_larval)
