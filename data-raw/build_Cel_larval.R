@@ -173,4 +173,5 @@ rm(X_O, X_H, X,
    dat, lm_h, 
    r20C, ae_r20,
    sO20, H_staged,
+   m, ndat, pca, nc,
    Cel_genes, Cel_larval)
