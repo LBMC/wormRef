@@ -34,7 +34,7 @@ NULL
 #' @rdname Cel_prep
 #' @export
 #' @importFrom RAPToR ge_im
-#' @importFrom utils data
+#' @importFrom stats predict
 #'
 .prepref_Cel_larval <- function(n.inter){
   # utils::data("Cel_larval", envir = environment())
