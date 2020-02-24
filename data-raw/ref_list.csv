@@ -1,4 +1,4 @@
-name,organism,data_pkg,description
+name,organism,description
 Cel_embryo,Caenorhabditis elegans,Embryonic development reference series from 1C to hatching
 Cel_larval,Caenorhabditis elegans,Larval development reference series from hatching to YA
 Cel_YA_1,Caenorhabditis elegans,YA development reference series from late larval to adult
