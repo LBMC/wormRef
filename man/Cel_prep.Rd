@@ -20,12 +20,13 @@
 \item{n.inter}{passed on to \code{\link[RAPToR]{plsr_interpol}}}
 }
 \value{
-The output of \code{\link[RAPToR]{plsr_interpol}}
+A list with \code{interpGE} the interpolated gene expression matrix and
+\code{time.series} the time of the interpGE matrix columns.
 }
 \description{
 Builds the PLSR interpolation of the reference dataset.
 \strong{These functions are internally called by \code{\link[RAPToR]{prepare_refdata}} from RAPToR.}
 }
 \seealso{
-\code{\link[RAPToR]{plsr_interpol}}
+\code{\link[RAPToR]{plsr_interpol}} \code{\link[RAPToR]{ge_im}}
 }

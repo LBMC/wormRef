@@ -4,7 +4,7 @@
 \name{Cel_larval}
 \alias{Cel_larval}
 \title{Cel_larval}
-\format{An object of class \code{list} of length 4.}
+\format{An object of class \code{list} of length 3.}
 \source{
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE49043}{GSE49043}
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52861}{GSE52861}

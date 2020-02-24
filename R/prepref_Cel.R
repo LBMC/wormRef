@@ -5,8 +5,10 @@
 #' 
 #' @param n.inter passed on to \code{\link[RAPToR]{plsr_interpol}}
 #' 
-#' @return The output of \code{\link[RAPToR]{plsr_interpol}}
-#' @seealso \code{\link[RAPToR]{plsr_interpol}}
+#' @return A list with \code{interpGE} the interpolated gene expression matrix and 
+#' \code{time.series} the time of the interpGE matrix columns.
+#' 
+#' @seealso \code{\link[RAPToR]{plsr_interpol}} \code{\link[RAPToR]{ge_im}}
 #' 
 #' @name Cel_prep
 NULL
@@ -31,19 +33,25 @@ NULL
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR plsr_interpol
+#' @importFrom RAPToR ge_im
 #' @importFrom utils data
 #'
 .prepref_Cel_larval <- function(n.inter){
   # utils::data("Cel_larval", envir = environment())
+  m <- RAPToR::ge_im(
+    X = wormRef::Cel_larval$g,
+    p = wormRef::Cel_larval$p,
+    formula = wormRef::Cel_larval$geim_params$formula,
+    method = wormRef::Cel_larval$geim_params$method,
+    dim_red = wormRef::Cel_larval$geim_params$dim_red,
+    nc = wormRef::Cel_larval$geim_params$nc
+  )
+  ndat <- data.frame(age = seq(min(wormRef::Cel_larval$p),
+                               max(wormRef::Cel_larval$p),
+                               l = n.inter),
+                     cov = rep(wormRef::Cel_larval$p$cov[1], n.inter))
   return(
-    RAPToR::plsr_interpol(
-      X = wormRef::Cel_larval$g, 
-      time.series = wormRef::Cel_larval$p$age, 
-      covar = wormRef::Cel_larval$p$cov, 
-      df = wormRef::Cel_larval$df,
-      plsr.nc = wormRef::Cel_larval$nc,
-      n.inter = n.inter)
+    list(interpGE = predict(m, ndat), time.series = ndat$age)
   )
 }
 
