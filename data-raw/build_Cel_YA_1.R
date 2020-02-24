@@ -99,8 +99,8 @@ P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 pca <- stats::prcomp(X[, sN2], rank = 20)
 nc <- sum(summary(pca)$importance[3, ] < .999) + 1
 
-m <- ge_im(X[, sel], P[sel,], formula = "X ~ s(age, bs = 'cr')", dim_red = "ica", nc = nc)
-ndat <- data.frame(age = seq(min(P[sel,"age"]), max(P[sel,"age"]), l = 500))
+m <- RAPToR::ge_im(X[, sN2], P[sN2,], formula = "X ~ s(age, bs = 'cr')", dim_red = "ica", nc = nc)
+ndat <- data.frame(age = seq(min(P[sN2,"age"]), max(P[sN2,"age"]), l = 500))
 
 rN2 <- list(g = predict(m, ndat), ts = ndat$age)
 ae_N2 <-  RAPToR::ae(X, rN2$g, rN2$ts, nb.cores = 3)
@@ -108,15 +108,15 @@ ae_N2 <-  RAPToR::ae(X, rN2$g, rN2$ts, nb.cores = 3)
 # par(mfrow = c(2,2))
 # plot(P$age_ini, ae_N2$age.estimates[,1],
 #      main = "Chron. vs ae", xlab = "Age", ylab = "ae",
-#      col = P$strain, lwd = 2)
-# legend("bottomright", bty = 'n', lwd = 3, col = 1:3, legend = levels(P$strain),
+#      col = P$cov, lwd = 2)
+# legend("bottomright", bty = 'n', lwd = 3, col = 1:6, legend = levels(P$cov),
 #        lty = NA, pch = 1, text.font = 2)
 # 
-# invisible(sapply(levels(P$strain), function(l){
+# invisible(sapply(unique(P$strain), function(l){
 #    s <- which(P$strain == l)
 #    plot(P$age_ini[s], ae_N2$age.estimates[s,1],
 #         main = paste0("Chron. vs ae (", l, ")"), xlab = "Age", ylab = "ae",
-#         col = which(l == levels(P$strain)), lwd = 2)
+#         col = P$cov[s], lwd = 2)
 # }))
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
@@ -143,7 +143,7 @@ Cel_YA_1 <- list(g = X,
 save('Cel_YA_1', file = "data/Cel_YA_1.RData", compress = "xz")
 rm(X, P,
    sN2, to_stage,
-   ae_young_N2, ae_N2, 
-   rN2, lm_N2, 
-   r_larv, dat,
+   ae_young_N2, ae_N2, m,
+   rN2, lm_N2, m_larv, ndat,
+   r_larv, dat, nc, pca,
    Cel_larval, Cel_YA_1)
