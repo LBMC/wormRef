@@ -1,4 +1,4 @@
-sapply(c("curl", "limma", "Biobase", "utils", "RAPToR", "stats"), 
+sapply(c("curl", "limma", "Biobase", "utils", "RAPToR", "stats", "ica"), 
        requireNamespace, quietly = T) 
 
 # utils for id/format conversion
@@ -73,10 +73,14 @@ X <- log(X + 1)
 
 # stage early N2 samples
 load("data/Cel_larval.RData")
-r_larv <- RAPToR::plsr_interpol(Cel_larval$g, Cel_larval$p$age, 
-                                df = Cel_larval$df, covar = Cel_larval$p$cov, 
-                                plsr.nc = Cel_larval$nc,
-                                topred = "O.20", n.inter = 500)
+m_larv <- RAPToR::ge_im(X = Cel_larval$g, p = Cel_larval$p, formula = Cel_larval$geim_params$formula,
+                        method = Cel_larval$geim_params$method, dim_red = Cel_larval$geim_params$dim_red,
+                        nc = Cel_larval$geim_params$nc)
+
+ndat <- data.frame(age = seq(min(Cel_larval$p$age), max(Cel_larval$p$age), l = 500),
+                   cov = rep(Cel_larval$p$cov[1], 500))
+
+r_larv <- list(interpGE = predict(m_larv, ndat), time.series = ndat$age)
 
 sN2 <- P$strain == "N2"
 to_stage <- sN2 & P$age_ini < max(r_larv$time.series)
@@ -92,9 +96,28 @@ P$age <- predict(lm_N2, P)
 P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
 # build temp N2 reference and stage all samples
-rN2 <- RAPToR::plsr_interpol(X[, sN2], P$age_ini[sN2], df = 5, covar = P$infect[sN2], 
-                             plsr.nc = 3, topred = 'NI', n.inter = 200)
-ae_N2 <-  RAPToR::ae(X, rN2$interpGE, rN2$time.series, nb.cores = 3)
+pca <- stats::prcomp(X[, sN2], rank = 20)
+nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+
+m <- ge_im(X[, sel], P[sel,], formula = "X ~ s(age, bs = 'cr')", dim_red = "ica", nc = nc)
+ndat <- data.frame(age = seq(min(P[sel,"age"]), max(P[sel,"age"]), l = 500))
+
+rN2 <- list(g = predict(m, ndat), ts = ndat$age)
+ae_N2 <-  RAPToR::ae(X, rN2$g, rN2$ts, nb.cores = 3)
+
+# par(mfrow = c(2,2))
+# plot(P$age_ini, ae_N2$age.estimates[,1],
+#      main = "Chron. vs ae", xlab = "Age", ylab = "ae",
+#      col = P$strain, lwd = 2)
+# legend("bottomright", bty = 'n', lwd = 3, col = 1:3, legend = levels(P$strain),
+#        lty = NA, pch = 1, text.font = 2)
+# 
+# invisible(sapply(levels(P$strain), function(l){
+#    s <- which(P$strain == l)
+#    plot(P$age_ini[s], ae_N2$age.estimates[s,1],
+#         main = paste0("Chron. vs ae (", l, ")"), xlab = "Age", ylab = "ae",
+#         col = which(l == levels(P$strain)), lwd = 2)
+# }))
 
 P$age[!sN2] <- ae_N2$age.estimates[!sN2, 1]
 
@@ -102,13 +125,22 @@ P$accession <- "E-MTAB-7573"
 P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
+
+# Get nc for final reference building
+pca <- stats::prcomp(X, rank = 45)
+nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+
+
 Cel_YA_1 <- list(g = X,
                  p = P,
-                 df = 5,
-                 nc = 8)
+                 geim_params = list(formula = "X ~ s(age, bs = 'cr') + cov",
+                                    method = "gam",
+                                    dim_red = "ica",
+                                    nc = nc)
+)
 
 # save object to data
-save('Cel_YA_1', file = "data/Cel_YA_1.RData")
+save('Cel_YA_1', file = "data/Cel_YA_1.RData", compress = "xz")
 rm(X, P,
    sN2, to_stage,
    ae_young_N2, ae_N2, 
