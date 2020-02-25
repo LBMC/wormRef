@@ -6,7 +6,7 @@
 \alias{.prepref_Cel_larval}
 \alias{.prepref_Cel_YA_1}
 \alias{.prepref_Cel_YA_2}
-\title{Build Interpolated Gene Expression Reference}
+\title{Build Interpolated Gene Expression References}
 \usage{
 .prepref_Cel_embryo(n.inter)
 
@@ -17,16 +17,16 @@
 .prepref_Cel_YA_2(n.inter)
 }
 \arguments{
-\item{n.inter}{passed on to \code{\link[RAPToR]{plsr_interpol}}}
+\item{n.inter}{the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)}.}
 }
 \value{
 A list with \code{interpGE} the interpolated gene expression matrix and
 \code{time.series} the time of the interpGE matrix columns.
 }
 \description{
-Builds the PLSR interpolation of the reference dataset.
+Builds the interpolation of the reference datasets.
 \strong{These functions are internally called by \code{\link[RAPToR]{prepare_refdata}} from RAPToR.}
 }
 \seealso{
-\code{\link[RAPToR]{plsr_interpol}} \code{\link[RAPToR]{ge_im}}
+\code{\link[RAPToR]{prepare_refdata}} \code{\link[RAPToR]{ge_im}}
 }

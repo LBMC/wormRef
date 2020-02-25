@@ -1,34 +1,40 @@
-#' Build Interpolated Gene Expression Reference
+#' Build Interpolated Gene Expression References
 #' 
-#' Builds the PLSR interpolation of the reference dataset.
+#' Builds the interpolation of the reference datasets.
 #' **These functions are internally called by \code{\link[RAPToR]{prepare_refdata}} from RAPToR.**
 #' 
-#' @param n.inter passed on to \code{\link[RAPToR]{plsr_interpol}}
+#' @param n.inter the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)}.
 #' 
 #' @return A list with \code{interpGE} the interpolated gene expression matrix and 
 #' \code{time.series} the time of the interpGE matrix columns.
 #' 
-#' @seealso \code{\link[RAPToR]{plsr_interpol}} \code{\link[RAPToR]{ge_im}}
+#' @seealso \code{\link[RAPToR]{prepare_refdata}} \code{\link[RAPToR]{ge_im}}
 #' 
 #' @name Cel_prep
 NULL
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR plsr_interpol
-#' @importFrom utils data
+#' @importFrom RAPToR ge_im
+#' @importFrom stats predict
 #' 
 .prepref_Cel_embryo <- function(n.inter){
   # utils::data("Cel_embryo", envir = environment())
+  m <- RAPToR::ge_im(
+    X = wormRef::Cel_embryo$g,
+    p = wormRef::Cel_embryo$p,
+    formula = wormRef::Cel_embryo$geim_params$formula,
+    method = wormRef::Cel_embryo$geim_params$method,
+    dim_red = wormRef::Cel_embryo$geim_params$dim_red,
+    nc = wormRef::Cel_embryo$geim_params$nc
+  )
+  ndat <- data.frame(age = seq(min(wormRef::Cel_embryo$p$age),
+                               max(wormRef::Cel_embryo$p$age),
+                               l = n.inter),
+                     cov = rep(wormRef::Cel_embryo$p$cov[1], n.inter))
   return(
-    RAPToR::plsr_interpol(
-      X = wormRef::Cel_embryo$g, 
-      time.series = wormRef::Cel_embryo$p$age, 
-      covar = wormRef::Cel_embryo$p$cov, 
-      df = wormRef::Cel_embryo$df,
-      plsr.nc = wormRef::Cel_embryo$nc,
-      n.inter = n.inter)
-    )
+    list(interpGE = predict(m, ndat), time.series = ndat$age)
+  )
 }
 
 #' @rdname Cel_prep
