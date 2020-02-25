@@ -89,7 +89,11 @@ rm(raw2rpkm, g_url_H, g_url_L, g_file_H, g_file_L, geo_id_H, geo_id_L)
 
 # filter bad Levin samples
 ccl <- RAPToR::cor.gene_expr(X_L, X_L)
-f_lev <- which(0.6 > apply(ccl, 1, quantile, probs = .99))
+f_lev <- c(which(0.6 > apply(ccl, 1, quantile, probs = .99)), 
+           which(P_L$title %in% c(paste0("sample_000", 1:4))),
+           which(P_L$title %in% c("sample_0097", "sample_0099", "sample_0100", "sample_0105", "sample_0106", "sample_0055",
+             "sample_0046", "sample_0010", "sample_0009", "sample_0058", "sample_0059")))
+# Named samples are removed bc they are clear outliers from PCA components, w.r.t dynamics.
 
 # join datasets
 X <- RAPToR::format_to_ref(X_H, X_L[, -f_lev])
@@ -111,14 +115,23 @@ colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
 P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
+
+# get nc for final reference building
+pca <- stats::prcomp(X, rank = 45)
+nc <- sum(summary(pca)$importance[3, ] < .95) + 1 # .95 bc of medium quality
+
+
 Cel_embryo <- list(g = X,
                    p = P,
-                   df = 19,
-                   nc = 20)
+                   geim_params = list(formula = "X ~ s(age, bs = 'tp', k = 14) + cov",
+                                      method = "gam",
+                                      dim_red = "pca",
+                                      nc = nc)
+                   )
 
 # save object to data
-save('Cel_embryo', file = "data/Cel_embryo.RData")
+save('Cel_embryo', file = "data/Cel_embryo.RData", compress = "xz")
 rm(X_H, X_L, X, 
    P_H, P_L, P,
-   ccl, f_lev,
+   ccl, f_lev, pca, nc,
    Cel_genes, Cel_embryo)
