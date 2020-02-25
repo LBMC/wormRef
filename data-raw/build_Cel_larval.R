@@ -121,6 +121,8 @@ r20C <- list(g = predict(m, ndat), ts = ndat$age_ini)
 # estimate age of samples
 ae_r20 <- ae(X, r20C$g, r20C$ts, bootstrap.n = 1)
 
+P$age[!sO20] <- ae_r20$age.estimates[!sO20, 1]
+
 # par(mfrow = c(2,2))
 # plot(P$age_ini, ae_r20$age.estimates[,1], 
 #      main = "Chron. vs ae", xlab = "Age", ylab = "ae", 
