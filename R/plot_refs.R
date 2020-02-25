@@ -10,7 +10,7 @@
 #' @export
 #' 
 #' @importFrom rlang .data
-plot_refs_Cel <- function(){
+plot_refs <- function(){
   if(!requireNamespace("ggplot2")){
     message("Install ggplot2 to see this graph !")
   }
