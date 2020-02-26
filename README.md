@@ -6,7 +6,7 @@ To install the package, you can use the `devtools` R package. This should be don
 
 ```r
 library(devtools)
-devtools::install_github("LBMC/wormRef", build_vignettes = T)
+devtools::install_github("LBMC/wormRef")
 ```
 
 If you don't have `devtools` installed, you can do the following :
@@ -18,5 +18,9 @@ install.packages("devtools")
 
 ## Update info
 
+### v0.2
+ - Updated the internal structure to match the new `RAPToR` interface witth data-packages.
+ - Re-evaluated optimal interpolation of reference series using the new GEIM approach of `RAPToR`.
+ 
 ### v0.1.4
  - Created the data package. 
