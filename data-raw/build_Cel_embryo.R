@@ -25,6 +25,8 @@ P_L <- Biobase::pData(P_L)
 P_L <- P_L[, c("title", "geo_accession", "time point (minutes after 4-cell):ch1")]
 colnames(P_L) <- c("sname", "accession", "age")
 P_L$age <- as.numeric(P_L$age)
+P_L$age_ini <- P_L$age
+
 
 # formatting
 colnames(X_L) <- gsub("Metazome_CE_timecourse_", "", colnames(X_L))
@@ -52,7 +54,7 @@ f_lev <- c(which(0.67 > apply(RAPToR::cor.gene_expr(X_L, X_L), 1, quantile, prob
 # Named samples are removed bc they are clear outliers from PCA components, w.r.t dynamics.
 
 
-P_L <- P_L[-f_lev, c("sname", "age", "accession")]
+P_L <- P_L[-f_lev, c("sname", "age", "accession", "age_ini")]
 X_L <- X_L[, -f_lev]
 
 
