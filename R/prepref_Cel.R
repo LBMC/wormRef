@@ -30,8 +30,7 @@ NULL
   )
   ndat <- data.frame(age = seq(min(wormRef::Cel_embryo$p$age),
                                max(wormRef::Cel_embryo$p$age),
-                               l = n.inter),
-                     cov = rep(wormRef::Cel_embryo$p$cov[1], n.inter))
+                               l = n.inter))
   return(
     list(interpGE = predict(m, ndat), time.series = ndat$age)
   )
