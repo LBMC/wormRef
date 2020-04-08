@@ -6,51 +6,11 @@ load("data/Cel_genes.RData")
 source("data-raw/raw2rpkm.R")
 
 
-
-### get Hashimshony data
-geo_id_H <- "GSE50548"
-
-g_url_H <- GEOquery::getGEOSuppFiles(geo_id_H, makeDirectory = FALSE, fetch_files = FALSE)
-g_file_H <- "data-raw/hash.tab.gz"
-utils::download.file(url = as.character(g_url_H$url[2]), destfile = g_file_H)
-
-X_H <- read.table(gzfile(g_file_H), h=T, sep = '\t', stringsAsFactors = F, row.names = 1)
-
-# convert to rpkm & wb_id
-X_H <- RAPToR::format_ids(X_H, Cel_genes, from = "sequence_name", to = "wb_id")
-X_H <- raw2rpkm(X = X_H, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
-
-
-# pheno data
-P_H <- GEOquery::getGEO('GSE50548', getGPL = F, GSEMatrix = F)
-P_H <- GEOquery::GSMList(P_H)
-P_H <- lapply(P_H, GEOquery::Meta)
-
-P_H <- do.call('rbind', lapply(P_H, function(p){
-  unlist(p[c("title", "source_name_ch1", "geo_accession", "description", "characteristics_ch1")])
-}))
-
-# keep only full embryo samples
-P_H <- P_H[grepl('embryo', P_H[,"source_name_ch1"]),]
-P_H <- P_H[, c("title", "geo_accession", "description")]
-
-P_H <- as.data.frame(P_H, stringsAsFactors = F)
-
-P_H$age <- as.numeric(gsub('(\\d+)\\s*-*.*', '\\1', as.character(P_H$description)))
-P_H$age[1:2] <- c(-50,-30)
-
-P_H$title[1:2] <- paste0('X', P_H$title[1:2])
-P_H$description <- NULL
-
-X_H <- X_H[, P_H$title]
-
-
-
 ### get Levin data
 geo_id_L <- "GSE60755"
 
 g_url_L <- GEOquery::getGEOSuppFiles(geo_id_L, makeDirectory = FALSE, fetch_files = FALSE)
-g_file_L <- "data-raw/levin.txt.gz"
+g_file_L <- paste0(data_folder, "dslevin2016cel.txt.gz") #"data-raw/levin.txt.gz"
 utils::download.file(url = as.character(g_url_L$url[1]), destfile = g_file_L)
 
 X_L <- read.table(gzfile(g_file_L), header = T, row.names = 1, sep = "\t")
@@ -59,79 +19,72 @@ X_L <- read.table(gzfile(g_file_L), header = T, row.names = 1, sep = "\t")
 X_L <- RAPToR::format_ids(X_L, Cel_genes, from = "sequence_name", to = "wb_id")
 X_L <- raw2rpkm(X = X_L, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
 
-
-# pheno data
 P_L <- GEOquery::getGEO(geo_id_L)[[1]]
 
 P_L <- Biobase::pData(P_L)
 P_L <- P_L[, c("title", "geo_accession", "time point (minutes after 4-cell):ch1")]
-colnames(P_L)[3] <- "age"
+colnames(P_L) <- c("sname", "accession", "age")
 P_L$age <- as.numeric(P_L$age)
 
 # formatting
 colnames(X_L) <- gsub("Metazome_CE_timecourse_", "", colnames(X_L))
-P_L$title <- gsub("Metazome_CE_timecourse_", "", P_L$title)
+P_L$sname <- gsub("Metazome_CE_timecourse_", "", P_L$sname)
 
 P_L <- P_L[order(P_L$age), ]
-X_L <- X_L[, P_L$title]
+X_L <- X_L[, P_L$sname]
 
 
 ### cleanup
-if(file.exists(g_file_H))
-  file.remove(g_file_H)
 if(file.exists(g_file_L))
-  file.remove(g_file_L)
+   file.remove(g_file_L)
 rm(raw2rpkm, g_url_H, g_url_L, g_file_H, g_file_L, geo_id_H, geo_id_L)
 
 
 
 ### build Cel_embryo object
-
 # filter bad Levin samples
-ccl <- RAPToR::cor.gene_expr(X_L, X_L)
-f_lev <- c(which(0.6 > apply(ccl, 1, quantile, probs = .99)), 
-           which(P_L$title %in% c(paste0("sample_000", 1:4))),
-           which(P_L$title %in% c("sample_0097", "sample_0099", "sample_0100", "sample_0105", "sample_0106", "sample_0055",
-             "sample_0046", "sample_0010", "sample_0009", "sample_0058", "sample_0059")))
+f_lev <- c(which(0.67 > apply(RAPToR::cor.gene_expr(X_L, X_L), 1, quantile, probs = .99)),
+           which(P_L$sname %in% c("sample_0097", "sample_0099", "sample_0046", "sample_0053", 
+                                  "sample_0054", "sample_0073", "sample_0100", "sample_0055", 
+                                  "sample_0056", "sample_0010", "sample_0105", "sample_0009", 
+                                  "sample_0106", "sample_0058", "sample_0059", "sample_0001", 
+                                  "sample_0002", "sample_0003", "sample_0004", "sample_0125")))
 # Named samples are removed bc they are clear outliers from PCA components, w.r.t dynamics.
 
-# join datasets
-X <- RAPToR::format_to_ref(X_H, X_L[, -f_lev])
-X <- cbind(X[[1]], X[[2]])
 
-X <- limma::normalizeBetweenArrays(X, method = "quantile")
-X <- log(X + 1)
+P_L <- P_L[-f_lev, c("sname", "age", "accession")]
+X_L <- X_L[, -f_lev]
 
 
-P_H$cov <- "H"
-P_L$cov <- "L"
+# Normalize
+X_L <- limma::normalizeBetweenArrays(X_L, method = "quantile")
+X_L <- log(X_L + 1)
 
-P <- rbind(P_H, P_L[-f_lev, ])
 
-# formatting
-P$cov <- factor(P$cov, levels = c("H", "L"))
-P$age_ini <- P$age
-colnames(P) <- c("sname", "accession", "age", "cov", "age_ini")
-P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
-X <- X[, P$sname]
+
 
 
 # get nc for final reference building
-pca <- stats::prcomp(X, rank = 45)
-nc <- sum(summary(pca)$importance[3, ] < .95) + 1 # .95 bc of medium quality
+pca <- stats::prcomp(X_L, rank = 10)
+nc <- sum(summary(pca)$importance[3, ] < .90) + 1 # .90 bc of medium quality
 
+# ks <- c(seq(4,16, 2))
+# flist <- as.list(c(paste0("X ~ s(age, bs = 'tp', k=",ks,")"), "X ~ s(age, bs = 'tp')"))
+# cv_L <- ge_imCV(X = X_L, p = P_L, formula_list = flist, method = "gam", dim_red = "pca", nc = nc)
+# 
+# plot(cv_L, names = paste0("k=", c(ks, 'n')))
 
-Cel_embryo <- list(g = X,
-                   p = P,
-                   geim_params = list(formula = "X ~ s(age, bs = 'tp', k = 14) + cov",
+Cel_embryo <- list(g = X_L,
+                   p = P_L,
+                   geim_params = list(formula = "X ~ s(age, bs = 'tp', k = 10)",
                                       method = "gam",
                                       dim_red = "pca",
                                       nc = nc)
-                   )
+)
+
 
 # save object to data
 save('Cel_embryo', file = "data/Cel_embryo.RData", compress = "xz")
-rm(X_H, X_L, X, 
-   P_H, P_L, P,
-   ccl, f_lev, pca, nc,
+rm(X_L, P_L,
+   f_lev, pca, nc,
    Cel_genes, Cel_embryo)
