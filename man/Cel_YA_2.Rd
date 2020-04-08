@@ -35,8 +35,13 @@ A list with :
 \item \code{age_ini} : Sample chronological age, as given in the literature.
 \item \code{accession} : Sample accession ID for GEO/ArrayExpress.
 }
-\item \verb{$df}: The degree of freedom to use for the PLSR interpolation model.
-\item \verb{$nc}: The number of PLS components to use for the prediction of the PLSR interpolation model
+\item \verb{$geim_params}: A list of elements needed for the gene expression interpolation model :
+\itemize{
+\item \verb{$formula} : the model formula.
+\item \verb{$method} : the model type (eg. gam, glm).
+\item \verb{$dim_red} : the dimension reduction method to use (pca, ica).
+\item \verb{$nc}: The number PCA/ICA components to use in the model.
+}
 }
 }
 

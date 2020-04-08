@@ -6,7 +6,6 @@
 \title{Cel_embryo}
 \format{An object of class \code{list} of length 3.}
 \source{
-\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50548}{GSE50548}
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
 }
 \usage{
@@ -16,9 +15,8 @@ Cel_embryo
 Transcriptomic data from \emph{C. elegans} embryonic samples.
 }
 \details{
-Two time series are included in this dataset.
+One time series is included in this dataset.
 \itemize{
-\item \code{H}: \insertCite{hashimshony2015spatiotemporal}{wormRef}
 \item \code{L}: \insertCite{levin2016mid}{wormRef}
 }
 
@@ -37,8 +35,13 @@ A list with :
 \item \code{age_ini} : Sample chronological age, as given in the literature.
 \item \code{accession} : Sample accession ID for GEO/ArrayExpress.
 }
-\item \verb{$df}: The degree of freedom to use for the PLSR interpolation model.
-\item \verb{$nc}: The number of PLS components to use for the prediction of the PLSR interpolation model
+\item \verb{$geim_params}: A list of elements needed for the gene expression interpolation model :
+\itemize{
+\item \verb{$formula} : the model formula.
+\item \verb{$method} : the model type (eg. gam, glm).
+\item \verb{$dim_red} : the dimension reduction method to use (pca, ica).
+\item \verb{$nc}: The number PCA/ICA components to use in the model.
+}
 }
 }
 
