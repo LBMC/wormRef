@@ -2,9 +2,7 @@
 #' 
 #' Transcriptomic data from *C. elegans* embryonic samples.
 #' 
-#' Two time series are included in this dataset.
-#' 
-#'  - `H`: \insertCite{hashimshony2015spatiotemporal}{wormRef}
+#' One time series is included in this dataset.
 #'  - `L`: \insertCite{levin2016mid}{wormRef}
 #' 
 #' 
@@ -14,8 +12,7 @@
 #' 
 #' @eval data_format()
 #' 
-#' @source \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50548}{GSE50548} 
-#' \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
+#' @source \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
 #' 
 #' @references
 #'    \insertAllCited{}
