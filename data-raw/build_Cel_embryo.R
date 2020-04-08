@@ -10,7 +10,7 @@ source("data-raw/raw2rpkm.R")
 geo_id_L <- "GSE60755"
 
 g_url_L <- GEOquery::getGEOSuppFiles(geo_id_L, makeDirectory = FALSE, fetch_files = FALSE)
-g_file_L <- paste0(data_folder, "dslevin2016cel.txt.gz") #"data-raw/levin.txt.gz"
+g_file_L <- "data-raw/levin.txt.gz"
 utils::download.file(url = as.character(g_url_L$url[1]), destfile = g_file_L)
 
 X_L <- read.table(gzfile(g_file_L), header = T, row.names = 1, sep = "\t")
@@ -37,7 +37,7 @@ X_L <- X_L[, P_L$sname]
 ### cleanup
 if(file.exists(g_file_L))
    file.remove(g_file_L)
-rm(raw2rpkm, g_url_H, g_url_L, g_file_H, g_file_L, geo_id_H, geo_id_L)
+rm(raw2rpkm, g_url_L, g_file_L, geo_id_L)
 
 
 
