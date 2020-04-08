@@ -9,8 +9,11 @@ data_format <- function(){
     - `cov` : A factor separating the samples into groups if needed (*e.g* multiple datasets, batches); else NULL.
     - `age_ini` : Sample chronological age, as given in the literature.
     - `accession` : Sample accession ID for GEO/ArrayExpress.
-  - `$df`: The degree of freedom to use for the PLSR interpolation model.
-  - `$nc`: The number of PLS components to use for the prediction of the PLSR interpolation model
+  - `$geim_params`: A list of elements needed for the gene expression interpolation model :
+    - `$formula` : the model formula.
+    - `$method` : the model type (eg. gam, glm).
+    - `$dim_red` : the dimension reduction method to use (pca, ica).
+    - `$nc`: The number PCA/ICA components to use in the model.
 "
   return(strsplit(txt, split = "\n")[[1]])
 }
