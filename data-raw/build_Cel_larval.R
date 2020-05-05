@@ -3,7 +3,7 @@ sapply(c("GEOquery", "limma", "Biobase", "utils", "RAPToR", "stats"),
 
 # utils for id/format conversion
 load("data/Cel_genes.RData")
-source("data-raw/raw2rpkm.R")
+source("data-raw/convert2tpm.R")
 
 ### get Oudenaarden data
 geo_id_O <- "GSE49043"
@@ -18,6 +18,9 @@ X_O <- X_O[!duplicated(X_O$GENEID), ] # remove duplicate rows
 rownames(X_O) <- X_O$GENEID
 X_O <- X_O[, -c(1:2)]
 X_O[is.na(X_O)] <- 0
+
+# convert to tpm
+X_O <- fpkm2tpm(X_O)
 
 # format ids
 X_O <- RAPToR::format_ids(X_O, Cel_genes, from = "sequence_name", to = "wb_id")
@@ -52,10 +55,9 @@ utils::download.file(url = as.character(g_url_H$url[2]), destfile = g_file_H)
 
 X_H <- read.table(gzfile(g_file_H), h=T, sep = '\t', stringsAsFactors = F, row.names = 1)
 
-# convert to rpkm & wb_id
-X_H <- RAPToR::format_ids(X_H, Cel_genes, from = "wb_id", to = "wb_id")
-X_H <- raw2rpkm(X = X_H, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
-
+# convert to tpm & wb_id
+X_H <- X_H[rownames(X_H)%in%Cel_genes$wb_id,]
+X_H <- raw2tpm(rawcounts = X_H, genelengths = Cel_genes$transcript_length[match(rownames(X_H), Cel_genes$wb_id)])
 
 # pheno data
 P_H <- Biobase::pData(GEOquery::getGEO(geo_id_H, getGPL = F)[[1]])
@@ -94,7 +96,7 @@ X <- RAPToR::format_to_ref(X_O, X_H)
 X <- cbind(X[[1]], X[[2]])
 
 X <- limma::normalizeBetweenArrays(X, method = "quantile")
-X <- log(X + 1)
+X <- log1p(X)
 
 P <- rbind(P_O[, c("title", "geo_accession", "age", "cov")], 
            P_H[, c("title", "geo_accession", "age", "cov")])
@@ -106,11 +108,11 @@ P$age_ini <- P$age
 
 # build temp 20C reference
 sO20 <- P$cov == "O.20" & P$title != "DH5_N2_38" # outlier with err. time
-pca <- stats::prcomp(X[, sO20], rank = 20)
+pca <- stats::prcomp(t(X[, sO20]), rank = 20)
 summary(pca)
 
 # select nb of components to use for interpolation
-nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+nc <- sum(summary(pca)$importance[3, ] < .99) + 1
 
 # build geim model and predictions
 m <- ge_im(X = X[, sO20], p = P[sO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
