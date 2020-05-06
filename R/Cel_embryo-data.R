@@ -6,7 +6,7 @@
 #'  - `L`: \insertCite{levin2016mid}{wormRef}
 #' 
 #' 
-#' The gene expression matrix is \eqn{log(X + 1)} of quantile-normalized raw data.
+#' The gene expression matrix is \eqn{log(X + 1)} of quantile-normalized TPM data.
 #' 
 #' @docType data
 #' 
