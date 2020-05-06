@@ -69,7 +69,7 @@ rm(raw_files, rawzips,
 ### build Cel_YA_1
 
 X <- limma::normalizeBetweenArrays(X, method = "quantile")
-X <- log(X + 1)
+X <- log1p(X)
 
 # stage early N2 samples
 load("data/Cel_larval.RData")
@@ -86,20 +86,21 @@ sN2 <- P$strain == "N2"
 to_stage <- sN2 & P$age_ini < max(r_larv$time.series)
 
 ae_young_N2 <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
-                          nb.cores = 3)
+                          nb.cores = 3, bootstrap.n = 1)
 
 # adjust the age of the N2 samples
-dat <- cbind(P[to_stage,], aeN2 = ae_young_N2$age.estimates[,1])
-lm_N2 <- lm(aeN2 ~ age_ini, data = dat)
+# dat <- cbind(P[to_stage,], aeN2 = ae_young_N2$age.estimates[,1])
+# lm_N2 <- lm(aeN2 ~ age_ini, data = dat)
 
-P$age <- predict(lm_N2, P)
+P$age <- P$age_ini #predict(lm_N2, P)
 P$age[to_stage] <- ae_young_N2$age.estimates[,1]
 
 # build temp N2 reference and stage all samples
-pca <- stats::prcomp(X[, sN2], rank = 20)
-nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+tXc <- scale(t(X[, sN2]), scale = F, center = T)
+pca <- summary(stats::prcomp(tXc, rank = 20, scale = F, center = F))
+nc <- sum(pca$importance[3, ] < .95) + 1
 
-m <- RAPToR::ge_im(X[, sN2], P[sN2,], formula = "X ~ s(age, bs = 'cr')", dim_red = "ica", nc = nc)
+m <- RAPToR::ge_im(X[, sN2], P[sN2,], formula = "X ~ s(age, bs = 'ds')", dim_red = "pca", nc = nc)
 ndat <- data.frame(age = seq(min(P[sN2,"age"]), max(P[sN2,"age"]), l = 500))
 
 rN2 <- list(g = predict(m, ndat), ts = ndat$age)
@@ -127,23 +128,24 @@ X <- X[, P$sname]
 
 
 # Get nc for final reference building
-pca <- stats::prcomp(X, rank = 45)
-nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+tXc <- scale(t(X), scale = F, center = T)
+pca <- summary(stats::prcomp(tXc, rank = 45))
+nc <- sum(pca$importance[3, ] < .95) + 1
 
 
 Cel_YA_1 <- list(g = X,
                  p = P,
                  geim_params = list(formula = "X ~ s(age, bs = 'cr') + cov",
                                     method = "gam",
-                                    dim_red = "ica",
+                                    dim_red = "pca",
                                     nc = nc)
 )
 
 # save object to data
 save('Cel_YA_1', file = "data/Cel_YA_1.RData", compress = "xz")
-rm(X, P,
+rm(X, P, tXc,
    sN2, to_stage,
    ae_young_N2, ae_N2, m,
-   rN2, lm_N2, m_larv, ndat,
-   r_larv, dat, nc, pca,
+   rN2, m_larv, ndat,
+   r_larv, nc, pca,
    Cel_larval, Cel_YA_1)
