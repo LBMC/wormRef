@@ -85,7 +85,7 @@ if(file.exists(g_file_O))
   file.remove(g_file_O)
 if(file.exists(g_file_H))
   file.remove(g_file_H)
-rm(raw2rpkm, g_url_O, g_url_H, g_file_O, g_file_H, geo_id_O, geo_id_H)
+rm(fpkm2tpm, raw2tpm, g_url_O, g_url_H, g_file_O, g_file_H, geo_id_O, geo_id_H)
 
 
 
@@ -108,34 +108,35 @@ P$age_ini <- P$age
 
 # build temp 20C reference
 sO20 <- P$cov == "O.20" & P$title != "DH5_N2_38" # outlier with err. time
-pca <- stats::prcomp(t(X[, sO20]), rank = 20)
-summary(pca)
+tXc <- scale(t(X[,sO20]), center = TRUE, scale = FALSE)
+pca <- summary(stats::prcomp(tXc, rank = 20))
+print(pca)
 
-# select nb of components to use for interpolation
-nc <- sum(summary(pca)$importance[3, ] < .99) + 1
+# select nb of components to use for interpolation (cutoff at 95% of explained variance)
+nc <- sum(pca$importance[3, ] < .95) + 1
 
 # build geim model and predictions
-m <- ge_im(X = X[, sO20], p = P[sO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
-           method = "gam", dim_red = "pca", nc = nc)
+m <- RAPToR::ge_im(X = X[, sO20], p = P[sO20,], formula = "X ~ s(age_ini, bs = 'ds')", 
+                   method = "gam", dim_red = "pca", nc = nc)
 ndat <- data.frame(age_ini = seq(min(P[sO20, "age_ini"]), max(P[sO20, "age_ini"]), l = 500))
 r20C <- list(g = predict(m, ndat), ts = ndat$age_ini)
 
 # estimate age of samples
-ae_r20 <- ae(X, r20C$g, r20C$ts, bootstrap.n = 1)
+ae_r20 <- RAPToR::ae(X, r20C$g, r20C$ts, bootstrap.n = 1)
 
 P$age[!sO20] <- ae_r20$age.estimates[!sO20, 1]
 
 # par(mfrow = c(2,2))
-# plot(P$age_ini, ae_r20$age.estimates[,1], 
-#      main = "Chron. vs ae", xlab = "Age", ylab = "ae", 
+# plot(P$age_ini, ae_r20$age.estimates[,1],
+#      main = "Chron. vs ae", xlab = "Age", ylab = "ae",
 #      col = P$cov, lwd = 2)
-# legend("bottomright", bty = 'n', lwd = 3, col = 1:3, legend = levels(P$cov), 
+# legend("bottomright", bty = 'n', lwd = 3, col = 1:3, legend = levels(P$cov),
 #        lty = NA, pch = 1, text.font = 2)
 # 
 # invisible(sapply(levels(P$cov), function(l){
 #    s <- which(P$cov == l)
-#    plot(P$age_ini[s], ae_r20$age.estimates[s,1], 
-#         main = paste0("Chron. vs ae (", l, ")"), xlab = "Age", ylab = "ae", 
+#    plot(P$age_ini[s], ae_r20$age.estimates[s,1],
+#         main = paste0("Chron. vs ae (", l, ")"), xlab = "Age", ylab = "ae",
 #         col = which(l == levels(P$cov)), lwd = 2)
 # }))
 
@@ -158,8 +159,9 @@ P <- P[, c("sname", "age", "cov", "age_ini", "accession")]
 X <- X[, P$sname]
 
 # Get nc for final reference building
-pca <- stats::prcomp(X, rank = 45)
-nc <- sum(summary(pca)$importance[3, ] < .999) + 1
+tXc <- scale(t(X), scale = FALSE, center = TRUE)
+pca <- summary(stats::prcomp(tXc, rank = 45))
+nc <- sum(pca$importance[3, ] < .99) + 1
 
 
 Cel_larval <- list(g = X,
@@ -172,7 +174,7 @@ Cel_larval <- list(g = X,
 
 # save object to data
 save('Cel_larval', file = "data/Cel_larval.RData", compress = "xz")
-rm(X_O, X_H, X, 
+rm(X_O, X_H, X, tXc,
    P_O, P_H, P,
    dat, lm_h, 
    r20C, ae_r20,
