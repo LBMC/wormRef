@@ -3,7 +3,8 @@ sapply(c("GEOquery", "limma", "Biobase", "utils", "RAPToR"),
 
 # utils for id/format conversion
 load("data/Cel_genes.RData")
-source("data-raw/raw2rpkm.R")
+# source("data-raw/raw2rpkm.R")
+source("data-raw/convert2tpm.R")
 
 
 ### get Levin data
@@ -15,9 +16,12 @@ utils::download.file(url = as.character(g_url_L$url[1]), destfile = g_file_L)
 
 X_L <- read.table(gzfile(g_file_L), header = T, row.names = 1, sep = "\t")
 
-# convert to rpkm & wb_id
+# convert to tpm & wb_id
+X_L <- X_L[rownames(X_L)%in%Cel_genes$sequence_name,]
+X_L <- raw2tpm(rawcounts = X_L, genelengths = Cel_genes$transcript_length[match(rownames(X_L), Cel_genes$sequence_name)])
+
 X_L <- RAPToR::format_ids(X_L, Cel_genes, from = "sequence_name", to = "wb_id")
-X_L <- raw2rpkm(X = X_L, gene.length = Cel_genes, id.col = "wb_id", l.col = "transcript_length")
+
 
 P_L <- GEOquery::getGEO(geo_id_L)[[1]]
 
@@ -39,7 +43,7 @@ X_L <- X_L[, P_L$sname]
 ### cleanup
 if(file.exists(g_file_L))
    file.remove(g_file_L)
-rm(raw2rpkm, g_url_L, g_file_L, geo_id_L)
+rm(fpkm2tpm, raw2tpm, g_url_L, g_file_L, geo_id_L)
 
 
 
@@ -60,25 +64,26 @@ X_L <- X_L[, -f_lev]
 
 # Normalize
 X_L <- limma::normalizeBetweenArrays(X_L, method = "quantile")
-X_L <- log(X_L + 1)
+X_L <- log1p(X_L)
 
 
 
 
 
 # get nc for final reference building
-pca <- stats::prcomp(X_L, rank = 10)
-nc <- sum(summary(pca)$importance[3, ] < .90) + 1 # .90 bc of medium quality
+tXc <- scale(t(X_L), center = TRUE, scale = FALSE)
+pca <- summary(stats::prcomp(tXc, rank = 25))
+nc <- sum(pca$importance[3, ] < .7) + 1 # .90 bc of medium quality
 
 # ks <- c(seq(4,16, 2))
-# flist <- as.list(c(paste0("X ~ s(age, bs = 'tp', k=",ks,")"), "X ~ s(age, bs = 'tp')"))
+# flist <- as.list(c(paste0("X ~ s(age, bs = 'cr', k=",ks,")"), "X ~ s(age, bs = 'cr')"))
 # cv_L <- ge_imCV(X = X_L, p = P_L, formula_list = flist, method = "gam", dim_red = "pca", nc = nc)
 # 
 # plot(cv_L, names = paste0("k=", c(ks, 'n')))
 
 Cel_embryo <- list(g = X_L,
                    p = P_L,
-                   geim_params = list(formula = "X ~ s(age, bs = 'tp', k = 10)",
+                   geim_params = list(formula = "X ~ s(age, bs = 'cr', k = 9)",
                                       method = "gam",
                                       dim_red = "pca",
                                       nc = nc)
@@ -87,6 +92,6 @@ Cel_embryo <- list(g = X_L,
 
 # save object to data
 save('Cel_embryo', file = "data/Cel_embryo.RData", compress = "xz")
-rm(X_L, P_L,
+rm(X_L, P_L, tXc,
    f_lev, pca, nc,
    Cel_genes, Cel_embryo)
