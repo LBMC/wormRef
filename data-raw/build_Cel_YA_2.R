@@ -28,7 +28,7 @@ P$cov <- factor(gsub('.*prep\\s(\\d).*', '\\1', P$source_name_ch2))
 # geno data
 X <- do.call(cbind, lapply(Gs, function(g){
   do.call(cbind, lapply(GEOquery::GSMList(g), function(gl){
-    GEOquery::Table(gl)[, "CH2_median"] - GEOquery::Table(gl)[, "CH2_back"]
+    GEOquery::Table(gl)[, "CH2_median"] #- GEOquery::Table(gl)[, "CH2_back"]
   }))
 }))
 
@@ -48,7 +48,7 @@ X <- X[, P$geo_accession]
 
 # log/normalize
 X <- limma::normalizeBetweenArrays(X, method = "quantile")
-X <- log(X + 1)
+X <- log1p(X)
 
 
 
@@ -65,9 +65,7 @@ r_larv <- list(interpGE = predict(m_larv, ndat), time.series = ndat$age)
 
 to_stage <- (35 + P$age_ini * 1.5) < max(r_larv$time.series)
 ae_young <- RAPToR::ae(X[,to_stage], r_larv$interpGE, r_larv$time.series,
-                       nb.cores = 3, 
-                       prior = (35 + P$age_ini[to_stage] * 1.5), 
-                       prior.params = 10)
+                       bootstrap.n = 1)
 
 dat <- cbind(P[to_stage,], ae = ae_young$age.estimates[,1])
 lm_r <- lm(ae ~ age_ini + cov, data = dat)
@@ -85,13 +83,14 @@ X <- X[, P$sname]
 
 
 # get nc for final reference building
-pca <- stats::prcomp(X, rank = 35)
-nc <- sum(summary(pca)$importance[3, ] < .9) + 1 # only .9 bc of bad quality
+tXc <- scale(t(X), scale = FALSE, center = TRUE)
+pca <- summary(stats::prcomp(tXc, rank = 20))
+nc <- sum(pca$importance[3, ] < .8) + 1 # only .9 bc of bad quality
 
 
 Cel_YA_2 <- list(g = X,
                  p = P,
-                 geim_params = list(formula = "X ~ s(age, bs = 'ts') + cov",
+                 geim_params = list(formula = "X ~ s(age, bs = 'tp') + cov",
                                     method = "gam",
                                     dim_red = "pca",
                                     nc = nc)
@@ -100,7 +99,7 @@ Cel_YA_2 <- list(g = X,
 # save object to data
 save('Cel_YA_2', file = "data/Cel_YA_2.RData", compress = "xz")
 
-rm(X, P,
+rm(X, P, tXc, 
    Gs, gpl, geo_ids,
    probe_ids, to_stage,
    ae_young, dat, lm_r, 
