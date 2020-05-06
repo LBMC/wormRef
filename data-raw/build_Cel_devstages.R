@@ -2,7 +2,7 @@ datasets_s <- "name, tstart, tend, tunit
 Cel_embryo, -50, 840, min past 4C
 Cel_larval, 0, 55, hours post-hatching
 Cel_YA_1, 39, 72, hours post-hatching
-Cel_YA_2, 48, 83, hours post-hatching
+Cel_YA_2, 48, 85, hours post-hatching
 "
 devstages_s <-"name, tstart, tend, tunit
 1C, -50, -20, min past 4C
