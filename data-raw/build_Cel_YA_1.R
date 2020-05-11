@@ -135,7 +135,7 @@ nc <- sum(pca$importance[3, ] < .95) + 1
 
 Cel_YA_1 <- list(g = X,
                  p = P,
-                 geim_params = list(formula = "X ~ s(age, bs = 'cr') + cov",
+                 geim_params = list(formula = "X ~ s(age, bs = 'cr', k = 8) + cov",
                                     method = "gam",
                                     dim_red = "pca",
                                     nc = nc)
