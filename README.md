@@ -17,7 +17,10 @@ install.packages("devtools")
 <hr>
 
 ## Update info
-
+### v0.3
+ - Updated reference parameters with RAPToR bug fix
+ - Changed all RPKM to TPM
+ - Updated the embryo reference with stricter quality filter on samples 
 ### v0.2
  - Updated the internal structure to match the new `RAPToR` interface witth data-packages.
  - Re-evaluated optimal interpolation of reference series using the new GEIM approach of `RAPToR`.
