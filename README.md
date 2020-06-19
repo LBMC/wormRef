@@ -18,12 +18,17 @@ install.packages("devtools")
 
 ## Update info
 ### v0.3
+#### v0.3.1
+ - Fixed plot_refs not diplaying
+ - Removed doc typos
+#### v0.3.0
  - Updated reference parameters with RAPToR bug fix
  - Changed all RPKM to TPM
  - Updated the embryo reference with stricter quality filter on samples 
+ 
 ### v0.2
  - Updated the internal structure to match the new `RAPToR` interface witth data-packages.
  - Re-evaluated optimal interpolation of reference series using the new GEIM approach of `RAPToR`.
  
-### v0.1.4
+### v0.1
  - Created the data package. 
