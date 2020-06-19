@@ -4,7 +4,9 @@
 \name{Cel_YA_1}
 \alias{Cel_YA_1}
 \title{Cel_YA_1}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \source{
 \href{https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-7573/}{E-MTAB-7573}
 }

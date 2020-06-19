@@ -4,7 +4,9 @@
 \name{Cel_genes}
 \alias{Cel_genes}
 \title{Cel_genes}
-\format{An object of class \code{data.frame} with 61541 rows and 5 columns.}
+\format{
+An object of class \code{data.frame} with 61541 rows and 5 columns.
+}
 \source{
 \href{https://parasite.wormbase.org/info/Tools/biomart.html}{paraSite biomaRt}
 }

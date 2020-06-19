@@ -4,7 +4,9 @@
 \name{Cel_YA_2}
 \alias{Cel_YA_2}
 \title{Cel_YA_2}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \source{
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE696}{GSE696}
 }

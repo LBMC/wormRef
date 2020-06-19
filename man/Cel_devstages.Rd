@@ -4,7 +4,9 @@
 \name{Cel_devstages}
 \alias{Cel_devstages}
 \title{Cel_devstages}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 Cel_devstages
 }
@@ -12,7 +14,7 @@ Cel_devstages
 Table of reference datasets and landmark developmental stages.
 }
 \details{
-The timing of developmetnal stages were compiled from the WormBook \insertCite{wormbook}{wormRef} and the publications
+The timing of developmental stages were compiled from the WormBook \insertCite{wormbook}{wormRef} and the publications
 associated with the datasets used to build the references.
 This mainly concerns the larval reference \insertCite{hyun2013dampening}{wormRef}
 }

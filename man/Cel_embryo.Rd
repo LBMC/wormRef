@@ -4,7 +4,9 @@
 \name{Cel_embryo}
 \alias{Cel_embryo}
 \title{Cel_embryo}
-\format{An object of class \code{list} of length 3.}
+\format{
+An object of class \code{list} of length 3.
+}
 \source{
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60755}{GSE60755}
 }
