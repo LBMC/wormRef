@@ -2,7 +2,7 @@
 #' 
 #' Table of reference datasets and landmark developmental stages.
 #' 
-#' The timing of developmetnal stages were compiled from the WormBook \insertCite{wormbook}{wormRef} and the publications 
+#' The timing of developmental stages were compiled from the WormBook \insertCite{wormbook}{wormRef} and the publications 
 #' associated with the datasets used to build the references. 
 #' This mainly concerns the larval reference \insertCite{hyun2013dampening}{wormRef}
 #' 
