@@ -23,7 +23,7 @@
   g <- ggplot2::ggplot(data = dat$datasets, mapping = ggplot2::aes(x = .data$tstart, y = .data$name, xend = .data$tend,)) +
     ggplot2::geom_segment(data = dat$datasets, ggplot2::aes(yend = .data$name, col = .data$name, size = 1.5), show.legend = F) +
     ggplot2::geom_text(data = dat$datasets, ggplot2::aes(col = .data$name, label = .data$name, size = 2), 
-                       fontface = "bold", vjust = "bottom", hjust = "left", nudge_y = .1,
+                       fontface = "bold", vjust = "bottom", hjust = "left", nudge_y = .2,
                        show.legend = F) +
     ggplot2::geom_text(data = lbs, ggplot2::aes(label = .data$tunit), 
                        x = Inf, y = -Inf, hjust = 1.5, vjust = -1, inherit.aes = F) +
