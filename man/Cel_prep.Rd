@@ -4,6 +4,7 @@
 \alias{Cel_prep}
 \alias{.prepref_Cel_embryo}
 \alias{.prepref_Cel_larval}
+\alias{.prepref_Cel_larv_YA}
 \alias{.prepref_Cel_YA_1}
 \alias{.prepref_Cel_YA_2}
 \title{Build Interpolated Gene Expression References}
@@ -11,6 +12,8 @@
 .prepref_Cel_embryo(n.inter)
 
 .prepref_Cel_larval(n.inter)
+
+.prepref_Cel_larv_YA(n.inter)
 
 .prepref_Cel_YA_1(n.inter)
 
