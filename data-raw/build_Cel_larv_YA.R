@@ -33,7 +33,6 @@ colnames(p) <- c("sname", "accession", "age_ini")
 
 p$age_ini <- as.numeric(gsub("(\\d+)h", "\\1", p$age_ini) )
 p$sname <- make.names(gsub("RNAseq N2 (\\d+h)", "\\1r", p$sname))
-p <- p[, c("sname", "age", "age_ini", "accession")]
 
 #all(p$sname==colnames(g))
 
@@ -57,16 +56,18 @@ ae_young <- RAPToR::ae(g[, sel], r_larv$interpGE, r_larv$time.series, prior = p$
 
 
 
-lm_y <- lm(ae_young$age.estimates[,1]~ 0 + p$age_ini[sel])
+lm_y <- stats::lm(ae_young$age.estimates[,1]~ 0 + p$age_ini[sel])
 p$age <- lm_y$coefficients[1] * p$age_ini
 
 
 
 
 # get nc for ge_im
-pca <- summary(prcomp(t(g), scale= F, center = T, rank = 40))
+pca <- summary(stats::prcomp(t(g), scale= F, center = T, rank = 40))
 nc <- sum(pca$importance["Cumulative Proportion",] < .99) + 1
 
+
+p <- p[, c("sname", "age", "age_ini", "accession")]
 
 Cel_lar_YA <- list(g = g,
                    p = p,
