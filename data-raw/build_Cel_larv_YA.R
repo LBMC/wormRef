@@ -85,4 +85,4 @@ file.remove(g_f)
 rm(g, p, g_f, sel, geo_id,
    m_larv, ndat, r_larv, ae_young,
    nc, pca, lm_y,
-   Cel_genes, Cel_larval, Cel_lar_YA)
+   Cel_genes, Cel_larval, Cel_larv_YA)
