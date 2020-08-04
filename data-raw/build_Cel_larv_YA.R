@@ -69,7 +69,7 @@ nc <- sum(pca$importance["Cumulative Proportion",] < .99) + 1
 
 p <- p[, c("sname", "age", "age_ini", "accession")]
 
-Cel_lar_YA <- list(g = g,
+Cel_larv_YA <- list(g = g,
                    p = p,
                    geim_params = list(formula = "X ~ s(age, k = 25, bs = 'cr')",
                                       method = "gam",
@@ -78,7 +78,7 @@ Cel_lar_YA <- list(g = g,
 )
 
 # save object to data
-save('Cel_lar_YA', file = "data/Cel_lar_YA.RData", compress = "xz")
+save('Cel_larv_YA', file = "data/Cel_larv_YA.RData", compress = "xz")
 
 
 file.remove(g_f)
