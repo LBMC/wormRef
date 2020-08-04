@@ -60,9 +60,33 @@ NULL
   )
 }
 
+
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR plsr_interpol
+#' @importFrom RAPToR ge_im
+#' @importFrom stats predict
+#' 
+.prepref_Cel_larv_YA <- function(n.inter){
+  # utils::data("Cel_larv_YA", envir = environment())
+  m <- RAPToR::ge_im(
+    X = wormRef::Cel_larv_YA$g,
+    p = wormRef::Cel_larv_YA$p,
+    formula = wormRef::Cel_larv_YA$geim_params$formula,
+    method = wormRef::Cel_larv_YA$geim_params$method,
+    dim_red = wormRef::Cel_larv_YA$geim_params$dim_red,
+    nc = wormRef::Cel_larv_YA$geim_params$nc
+  )
+  ndat <- data.frame(age = seq(min(wormRef::Cel_larv_YA$p$age),
+                               max(wormRef::Cel_larv_YA$p$age),
+                               l = n.inter))
+  return(
+    list(interpGE = predict(m, ndat), time.series = ndat$age)
+  )
+}
+
+#' @rdname Cel_prep
+#' @export
+#' @importFrom RAPToR ge_im
 #' @importFrom stats predict
 #'
 .prepref_Cel_YA_1 <- function(n.inter){
@@ -86,7 +110,7 @@ NULL
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR plsr_interpol
+#' @importFrom RAPToR ge_im
 #' @importFrom utils data
 #'
 .prepref_Cel_YA_2 <- function(n.inter){
