@@ -17,6 +17,9 @@ install.packages("devtools")
 <hr>
 
 ## Update info
+### v0.4
+ - Added Meeuse et al. (2020) reference spanning L1 to adult development
+
 ### v0.3
 #### v0.3.1
  - Fixed plot_refs not diplaying
