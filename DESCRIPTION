@@ -1,6 +1,6 @@
 Package: wormRef
 Title: Nematode Reference Data For The RAPToR Package
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
   person("Romain", "Bulteau", email = "romain.bulteau@ens-lyon.fr",
     role = c("aut", "cre")),
@@ -12,7 +12,7 @@ Description: wormRef is a data package that holds the nematode reference data fo
 Depends: 
   R (>= 3.4.0)
 Imports:
-  RAPToR,
+  RAPToR (>= 1.2.0),
   Rdpack,
   utils,
   rlang
