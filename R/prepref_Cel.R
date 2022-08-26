@@ -3,12 +3,12 @@
 #' Builds the interpolation of the reference datasets.
 #' **These functions are internally called by \code{\link[RAPToR]{prepare_refdata}} from RAPToR.**
 #' 
-#' @param n.inter the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)}.
+#' @param n.inter,by.inter the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)} or \code{seq(start, end, by = by.inter)}.
 #' 
 #' @return A list with \code{interpGE} the interpolated gene expression matrix and 
 #' \code{time.series} the time of the interpGE matrix columns.
 #' 
-#' @seealso \code{\link[RAPToR]{prepare_refdata}} \code{\link[RAPToR]{ge_im}}
+#' @seealso \code{\link[RAPToR]{prepare_refdata}} \code{\link[RAPToR]{ge_im}} \code{\link[RAPToR]{make_ref}}
 #' 
 #' @name Cel_prep
 NULL
