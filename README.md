@@ -17,6 +17,10 @@ install.packages("devtools")
 <hr>
 
 ## Update info
+### v0.5
+ - Built a function factory to simplify ref. building code
+ - Added reference metadata to comply with RAPToR v1.2 update.
+ - Added time range/unit info in list_refs 
 ### v0.4
  - Added Meeuse et al. (2020) reference spanning L1 to adult development
 
