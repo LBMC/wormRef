@@ -13,6 +13,37 @@
 #' @name Cel_prep
 NULL
 
+
+
+#' @rdname Cel_prep
+#' @export
+#' @importFrom RAPToR ge_im make_ref
+#' @importFrom stats predict
+#' 
+.prepref_skel <- function(data){
+  # .prepref function factory
+  f <- function(n.inter=NULL, by.inter=NULL){
+    m <- RAPToR::ge_im(
+      X = data$g,
+      p = data$p,
+      formula = data$geim_params$formula,
+      method = data$geim_params$method,
+      dim_red = data$geim_params$dim_red,
+      nc = data$geim_params$nc
+    )
+    return(RAPToR::make_ref(m, 
+                            n.inter = n.inter,
+                            by.inter = by.inter,
+                            t.unit = data$t.unit,
+                            cov.levels = data$cov.levels,
+                            metadata = data$metadata)
+    )
+  }
+  return(f)
+}
+
+
+
 #' @rdname Cel_prep
 #' @export
 #' @importFrom RAPToR ge_im
@@ -28,37 +59,38 @@ NULL
     dim_red = wormRef::Cel_embryo$geim_params$dim_red,
     nc = wormRef::Cel_embryo$geim_params$nc
   )
-  ndat <- data.frame(age = seq(min(wormRef::Cel_embryo$p$age),
-                               max(wormRef::Cel_embryo$p$age),
-                               l = n.inter))
   return(
-    list(interpGE = predict(m, ndat), time.series = ndat$age)
+    RAPToR::make_ref(m, 
+                     n.inter = n.inter,
+                     t.unit = wormRef::Cel_embryo$t.unit,
+                     cov.levels = wormRef::Cel_embryo$cov.levels,
+                     metadata = wormRef::Cel_embryo$metadata)
   )
 }
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR ge_im
-#' @importFrom stats predict
 #'
-.prepref_Cel_larval <- function(n.inter){
-  # utils::data("Cel_larval", envir = environment())
-  m <- RAPToR::ge_im(
-    X = wormRef::Cel_larval$g,
-    p = wormRef::Cel_larval$p,
-    formula = wormRef::Cel_larval$geim_params$formula,
-    method = wormRef::Cel_larval$geim_params$method,
-    dim_red = wormRef::Cel_larval$geim_params$dim_red,
-    nc = wormRef::Cel_larval$geim_params$nc
-  )
-  ndat <- data.frame(age = seq(min(wormRef::Cel_larval$p$age),
-                               max(wormRef::Cel_larval$p$age),
-                               l = n.inter),
-                     cov = rep(wormRef::Cel_larval$p$cov[1], n.inter))
-  return(
-    list(interpGE = predict(m, ndat), time.series = ndat$age)
-  )
-}
+.prepref_Cel_larval <- .prepref_skel(wormRef::Cel_larval)
+
+# .prepref_Cel_larval <- function(n.inter){
+#   # utils::data("Cel_larval", envir = environment())
+#   m <- RAPToR::ge_im(
+#     X = wormRef::Cel_larval$g,
+#     p = wormRef::Cel_larval$p,
+#     formula = wormRef::Cel_larval$geim_params$formula,
+#     method = wormRef::Cel_larval$geim_params$method,
+#     dim_red = wormRef::Cel_larval$geim_params$dim_red,
+#     nc = wormRef::Cel_larval$geim_params$nc
+#   )
+#   return(
+#     RAPToR::make_ref(m, 
+#                      n.inter = n.inter,
+#                      t.unit = wormRef::Cel_larval$t.unit,
+#                      cov.levels = wormRef::Cel_larval$cov.levels,
+#                      metadata = wormRef::Cel_larval$metadata)
+#   )
+# }
 
 
 #' @rdname Cel_prep
