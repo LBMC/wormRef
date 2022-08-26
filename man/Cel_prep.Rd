@@ -2,6 +2,7 @@
 % Please edit documentation in R/prepref_Cel.R
 \name{Cel_prep}
 \alias{Cel_prep}
+\alias{.prepref_skel}
 \alias{.prepref_Cel_embryo}
 \alias{.prepref_Cel_larval}
 \alias{.prepref_Cel_larv_YA}
@@ -9,15 +10,17 @@
 \alias{.prepref_Cel_YA_2}
 \title{Build Interpolated Gene Expression References}
 \usage{
-.prepref_Cel_embryo(n.inter)
+.prepref_skel(data, from = NULL, to = NULL)
 
-.prepref_Cel_larval(n.inter)
+.prepref_Cel_embryo(n.inter = NULL, by.inter = NULL)
 
-.prepref_Cel_larv_YA(n.inter)
+.prepref_Cel_larval(n.inter = NULL, by.inter = NULL)
 
-.prepref_Cel_YA_1(n.inter)
+.prepref_Cel_larv_YA(n.inter = NULL, by.inter = NULL)
 
-.prepref_Cel_YA_2(n.inter)
+.prepref_Cel_YA_1(n.inter = NULL, by.inter = NULL)
+
+.prepref_Cel_YA_2(n.inter = NULL, by.inter = NULL)
 }
 \arguments{
 \item{n.inter}{the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)}.}

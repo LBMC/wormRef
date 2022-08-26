@@ -5,7 +5,7 @@
 \alias{Cel_larv_YA}
 \title{Cel_larv_YA}
 \format{
-An object of class \code{list} of length 3.
+An object of class \code{list} of length 6.
 }
 \source{
 \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE130811}{GSE130811}
@@ -44,6 +44,9 @@ A list with :
 \item \verb{$dim_red} : the dimension reduction method to use (pca, ica).
 \item \verb{$nc}: The number PCA/ICA components to use in the model.
 }
+\item \verb{$t.unit}: the time series unit (e.g 'hours').
+\item \verb{$cov.levels}: a named list of potential covariate with the level to interpolate as.
+\item \verb{$metadata}: a named list of extra metadata (e.g organism, profiling technology).
 }
 }
 
