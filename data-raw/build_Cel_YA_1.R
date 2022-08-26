@@ -140,7 +140,7 @@ Cel_YA_1 <- list(g = X,
                                     dim_red = "pca",
                                     nc = nc),
                  t.unit = "h past egg-laying (20C)",
-                 cov.levels = list("cov"="N2.I"),
+                 cov.levels = list("cov"="N2.NI"),
                  metadata = list("organism" = "C. elegans",
                                  "profiling" = "whole-organism, bulk",
                                  "technology" = "Microarray")
