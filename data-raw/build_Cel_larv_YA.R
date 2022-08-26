@@ -74,7 +74,12 @@ Cel_larv_YA <- list(g = g,
                    geim_params = list(formula = "X ~ s(age, k = 25, bs = 'cr')",
                                       method = "gam",
                                       dim_red = "ica",
-                                      nc = nc)
+                                      nc = nc),
+                   t.unit = "h past egg-laying (20C)",
+                   cov.levels = NULL,
+                   metadata = list("organism" = "C. elegans",
+                                   "profiling" = "whole-organism, bulk",
+                                   "technology" = "RNAseq")
 )
 
 # save object to data
