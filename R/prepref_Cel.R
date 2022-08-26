@@ -64,27 +64,8 @@ NULL
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR ge_im
-#' @importFrom stats predict
 #'
-.prepref_Cel_YA_1 <- function(n.inter){
-  # utils::data("Cel_YA_1", envir = environment())
-  m <- RAPToR::ge_im(
-    X = wormRef::Cel_YA_1$g,
-    p = wormRef::Cel_YA_1$p,
-    formula = wormRef::Cel_YA_1$geim_params$formula,
-    method = wormRef::Cel_YA_1$geim_params$method,
-    dim_red = wormRef::Cel_YA_1$geim_params$dim_red,
-    nc = wormRef::Cel_YA_1$geim_params$nc
-  )
-  ndat <- data.frame(age = seq(min(wormRef::Cel_YA_1$p$age),
-                               max(wormRef::Cel_YA_1$p$age),
-                               l = n.inter),
-                     cov = rep("N2.NI", n.inter))
-  return(
-    list(interpGE = predict(m, ndat), time.series = ndat$age)
-  )
-}
+.prepref_Cel_YA_1 <- .prepref_skel(wormRef::Cel_YA_1)
 
 #' @rdname Cel_prep
 #' @export
