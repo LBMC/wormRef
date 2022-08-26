@@ -50,7 +50,7 @@ P$infect <- factor(P$infect, levels = c("Orsay virus", "none"), labels = c("I", 
 P$cov <- factor(paste0(P$strain, '.', P$infect))
 P$age_ini <- as.numeric(P$age_ini)
 
-P <- P[order(P$age_ini),]
+P <- na.omit(P[order(P$age_ini),])
 X <- X[,P$sname]
 
 ### cleanup
@@ -138,7 +138,12 @@ Cel_YA_1 <- list(g = X,
                  geim_params = list(formula = "X ~ s(age, bs = 'cr', k = 8) + cov",
                                     method = "gam",
                                     dim_red = "pca",
-                                    nc = nc)
+                                    nc = nc),
+                 t.unit = "h past egg-laying (20C)",
+                 cov.levels = list("cov"="N2.I"),
+                 metadata = list("organism" = "C. elegans",
+                                 "profiling" = "whole-organism, bulk",
+                                 "technology" = "Microarray")
 )
 
 # save object to data
