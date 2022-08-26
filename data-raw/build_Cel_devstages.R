@@ -12,7 +12,7 @@ devstages_s <-"name, tstart, tend, tunit
 Gastrulation, 150, 350, min past 4C
 Comma, 400, 460, min past 4C
 2-fold, 460, 520, min past 4C
-4-fold, 520, 600, min past 4C
+3-fold, 520, 600, min past 4C
 L1, 0,  20, hours post-hatching
 L2, 20, 30, hours post-hatching
 L3, 30, 38, hours post-hatching
