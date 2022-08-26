@@ -20,7 +20,7 @@ NULL
 #' @importFrom RAPToR ge_im make_ref
 #' @importFrom stats predict
 #' 
-.prepref_skel <- function(data){
+.prepref_skel <- function(data, from=NULL, to=NULL){
   # .prepref function factory
   f <- function(n.inter=NULL, by.inter=NULL){
     m <- RAPToR::ge_im(
@@ -34,6 +34,8 @@ NULL
     return(RAPToR::make_ref(m, 
                             n.inter = n.inter,
                             by.inter = by.inter,
+                            from = from, 
+                            to = to,
                             t.unit = data$t.unit,
                             cov.levels = data$cov.levels,
                             metadata = data$metadata)
@@ -67,26 +69,9 @@ NULL
 #'
 .prepref_Cel_YA_1 <- .prepref_skel(wormRef::Cel_YA_1)
 
+
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR ge_im
-#' @importFrom utils data
 #'
-.prepref_Cel_YA_2 <- function(n.inter){
-  # utils::data("Cel_YA_2", envir = environment())
-  m <- RAPToR::ge_im(
-    X = wormRef::Cel_YA_2$g,
-    p = wormRef::Cel_YA_2$p,
-    formula = wormRef::Cel_YA_2$geim_params$formula,
-    method = wormRef::Cel_YA_2$geim_params$method,
-    dim_red = wormRef::Cel_YA_2$geim_params$dim_red,
-    nc = wormRef::Cel_YA_2$geim_params$nc
-  )
-  ndat <- data.frame(age = seq(48, # bc of bad quality
-                               max(wormRef::Cel_YA_2$p$age),
-                               l = n.inter),
-                     cov = rep(wormRef::Cel_YA_2$p$cov[2], n.inter))
-  return(
-    list(interpGE = predict(m, ndat), time.series = ndat$age)
-  )
-}
+.prepref_Cel_YA_2 <- .prepref_skel(wormRef::Cel_YA_2, from=48) 
+# from = 48h because of bad quality
