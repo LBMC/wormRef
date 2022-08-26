@@ -14,6 +14,9 @@ data_format <- function(){
     - `$method` : the model type (eg. gam, glm).
     - `$dim_red` : the dimension reduction method to use (pca, ica).
     - `$nc`: The number PCA/ICA components to use in the model.
+  - `$t.unit`: the time series unit (e.g 'hours').
+  - `$cov.levels`: a named list of potential covariate with the level to interpolate as.
+  - `$metadata`: a named list of extra metadata (e.g organism, profiling technology).
 "
   return(strsplit(txt, split = "\n")[[1]])
 }
