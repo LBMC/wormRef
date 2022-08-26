@@ -46,51 +46,15 @@ NULL
 
 #' @rdname Cel_prep
 #' @export
-#' @importFrom RAPToR ge_im
-#' @importFrom stats predict
 #' 
-.prepref_Cel_embryo <- function(n.inter){
-  # utils::data("Cel_embryo", envir = environment())
-  m <- RAPToR::ge_im(
-    X = wormRef::Cel_embryo$g,
-    p = wormRef::Cel_embryo$p,
-    formula = wormRef::Cel_embryo$geim_params$formula,
-    method = wormRef::Cel_embryo$geim_params$method,
-    dim_red = wormRef::Cel_embryo$geim_params$dim_red,
-    nc = wormRef::Cel_embryo$geim_params$nc
-  )
-  return(
-    RAPToR::make_ref(m, 
-                     n.inter = n.inter,
-                     t.unit = wormRef::Cel_embryo$t.unit,
-                     cov.levels = wormRef::Cel_embryo$cov.levels,
-                     metadata = wormRef::Cel_embryo$metadata)
-  )
-}
+.prepref_Cel_embryo <- .prepref_skel(wormRef::Cel_larval)
+
 
 #' @rdname Cel_prep
 #' @export
 #'
 .prepref_Cel_larval <- .prepref_skel(wormRef::Cel_larval)
 
-# .prepref_Cel_larval <- function(n.inter){
-#   # utils::data("Cel_larval", envir = environment())
-#   m <- RAPToR::ge_im(
-#     X = wormRef::Cel_larval$g,
-#     p = wormRef::Cel_larval$p,
-#     formula = wormRef::Cel_larval$geim_params$formula,
-#     method = wormRef::Cel_larval$geim_params$method,
-#     dim_red = wormRef::Cel_larval$geim_params$dim_red,
-#     nc = wormRef::Cel_larval$geim_params$nc
-#   )
-#   return(
-#     RAPToR::make_ref(m, 
-#                      n.inter = n.inter,
-#                      t.unit = wormRef::Cel_larval$t.unit,
-#                      cov.levels = wormRef::Cel_larval$cov.levels,
-#                      metadata = wormRef::Cel_larval$metadata)
-#   )
-# }
 
 
 #' @rdname Cel_prep
