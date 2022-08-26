@@ -86,7 +86,12 @@ Cel_embryo <- list(g = X_L,
                    geim_params = list(formula = "X ~ s(age, bs = 'cr', k = 9)",
                                       method = "gam",
                                       dim_red = "pca",
-                                      nc = nc)
+                                      nc = nc),
+                   t.unit = "min past 4-cell (20C)",
+                   cov.levels = NULL,
+                   metadata = list("organism" = "C. elegans",
+                                   "profiling" = "whole-organism, single-embryo",
+                                   "technology" = "RNAseq")
 )
 
 
