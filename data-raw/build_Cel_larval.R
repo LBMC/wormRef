@@ -169,7 +169,12 @@ Cel_larval <- list(g = X,
                    geim_params = list(formula = "X ~ s(age, bs = 'ds') + cov",
                                       method = "gam",
                                       dim_red = "pca",
-                                      nc = nc)
+                                      nc = nc),
+                   t.unit = "h past egg-laying (20C)",
+                   cov.levels = list("cov"="O.20"),
+                   metadata = list("organism" = "C. elegans",
+                                   "profiling" = "whole-organism, bulk",
+                                   "technology" = "RNAseq")
                    )
 
 # save object to data
