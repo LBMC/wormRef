@@ -9,6 +9,9 @@ geo_ids <- c("GSE726", "GSE727", "GSE728", "GSE729",
              "GSE730", "GSE731", "GSE732", "GSE733",
              "GSE734", "GSE735", "GSE736", "GSE737")
 
+# need to change locale because of encoding issue on GEO...
+Sys.setlocale(locale="C")
+
 Gs <- lapply(geo_ids, GEOquery::getGEO, GSEMatrix = F)
 
 # pheno data
@@ -93,11 +96,19 @@ Cel_YA_2 <- list(g = X,
                  geim_params = list(formula = "X ~ s(age, bs = 'tp') + cov",
                                     method = "gam",
                                     dim_red = "pca",
-                                    nc = nc)
+                                    nc = nc),
+                 t.unit = "h past egg-laying (20C)",
+                 cov.levels = list("cov"="2"),
+                 metadata = list("organism" = "C. elegans",
+                                 "profiling" = "whole-organism, bulk",
+                                 "technology" = "Microarray")
 )
 
 # save object to data
 save('Cel_YA_2', file = "data/Cel_YA_2.RData", compress = "xz")
+
+#set locale back:
+Sys.setlocale(locale="en_US.UTF-8")
 
 rm(X, P, tXc, 
    Gs, gpl, geo_ids,
