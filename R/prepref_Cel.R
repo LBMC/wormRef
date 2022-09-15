@@ -49,7 +49,7 @@ NULL
 #' @rdname Cel_prep
 #' @export
 #' 
-.prepref_Cel_embryo <- .prepref_skel(wormRef::Cel_larval)
+.prepref_Cel_embryo <- .prepref_skel(wormRef::Cel_embryo)
 
 
 #' @rdname Cel_prep
