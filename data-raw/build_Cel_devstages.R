@@ -1,5 +1,3 @@
-
-
 devst <- read.table(file =  file.path("data-raw", "dev_timings.csv"), h = T, sep = ',', stringsAsFactors = F)
 devst$tunit <- factor(devst$tunit)
 
