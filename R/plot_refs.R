@@ -16,7 +16,7 @@
   }
   # utils::data("Cel_devstages", envir = environment())
   dat <- wormRef::Cel_devstages
-  lbs <- data.frame(tunit=unique(dat$devstages$tunit), lab = c("Embryo", "Post-Hatching"))
+  lbs <- data.frame(tunit=unique(dat$devstages$tunit), lab = c("Embryo", "Post-Hatching", "Aging"))
   
   eb <- ggplot2::element_blank()
     
