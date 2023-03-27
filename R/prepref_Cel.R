@@ -75,3 +75,10 @@ NULL
 #'
 .prepref_Cel_YA_2 <- .prepref_skel(wormRef::Cel_YA_2, from=48) 
 # from = 48h because of bad quality
+
+
+#' @rdname Cel_prep
+#' @export
+#'
+.prepref_Cel_aging_1 <- .prepref_skel(wormRef::Cel_aging_1) 
+# from = 48h because of bad quality
