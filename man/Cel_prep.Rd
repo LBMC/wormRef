@@ -8,6 +8,7 @@
 \alias{.prepref_Cel_larv_YA}
 \alias{.prepref_Cel_YA_1}
 \alias{.prepref_Cel_YA_2}
+\alias{.prepref_Cel_aging_1}
 \title{Build Interpolated Gene Expression References}
 \usage{
 .prepref_skel(data, from = NULL, to = NULL)
@@ -21,6 +22,8 @@
 .prepref_Cel_YA_1(n.inter = NULL, by.inter = NULL)
 
 .prepref_Cel_YA_2(n.inter = NULL, by.inter = NULL)
+
+.prepref_Cel_aging_1(n.inter = NULL, by.inter = NULL)
 }
 \arguments{
 \item{n.inter, by.inter}{the resolution of the interpolation, as in \code{seq(start, end, length.out = n.inter)} or \code{seq(start, end, by = by.inter)}.}
