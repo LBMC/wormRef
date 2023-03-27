@@ -142,8 +142,8 @@ Cel_YA_1 <- list(g = X,
                  t.unit = "h past egg-laying (20C)",
                  cov.levels = list("cov"="N2.NI"),
                  metadata = list("organism" = "C. elegans",
-                                 "profiling" = "whole-organism, bulk",
-                                 "technology" = "Microarray")
+                                 "profiling" = "bulk Microarray",
+                                 "source" = "E-MTAB-7573")
 )
 
 # save object to data
