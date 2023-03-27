@@ -90,8 +90,8 @@ Cel_embryo <- list(g = X_L,
                    t.unit = "min past 4-cell (20C)",
                    cov.levels = NULL,
                    metadata = list("organism" = "C. elegans",
-                                   "profiling" = "whole-organism, single-embryo",
-                                   "technology" = "RNAseq")
+                                   "profiling" = "single-embryo RNAseq",
+                                   "source" = "GSE60755")
 )
 
 
