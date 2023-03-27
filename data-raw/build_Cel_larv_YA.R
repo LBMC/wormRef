@@ -78,8 +78,8 @@ Cel_larv_YA <- list(g = g,
                    t.unit = "h past egg-laying (20C)",
                    cov.levels = NULL,
                    metadata = list("organism" = "C. elegans",
-                                   "profiling" = "whole-organism, bulk",
-                                   "technology" = "RNAseq")
+                                   "profiling" = "whole-organism, bulk RNAseq",
+                                   "source" = "GSE130811")
 )
 
 # save object to data
