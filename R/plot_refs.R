@@ -34,7 +34,7 @@
                        fontface = "bold", vjust = "bottom", hjust = "left", nudge_y = .1,
                        color = rep(c("black", "grey50"), length.out = nrow(dat$devstages)), show.legend = F) +
     
-    ggplot2::facet_wrap(~.data$tunit, scales = "free", nrow = 2) +
+    ggplot2::facet_wrap(~.data$tunit, scales = "free", nrow = nrow(lbs)) +
     ggplot2::theme_classic() + ggplot2::xlab("time") + 
     ggplot2::theme(strip.background = eb, strip.text = eb, 
                    axis.title.y = eb, axis.text.y = eb)

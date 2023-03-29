@@ -5,7 +5,7 @@
 \alias{ref_list}
 \title{List of reference in the wormRef data-package}
 \format{
-An object of class \code{data.frame} with 5 rows and 4 columns.
+An object of class \code{data.frame} with 6 rows and 4 columns.
 }
 \usage{
 ref_list
