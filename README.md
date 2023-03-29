@@ -2,16 +2,12 @@
 
 This repo is an R package with the nematode development references for age estimation using the [`RAPToR` tool](https://github.com/LBMC/RAPToR).
 
-To install the package, you can use the `devtools` R package. This should be done in your R console :
+To install the package, run the following in your R console :
 
 ```r
-library(devtools)
-devtools::install_github("LBMC/wormRef")
-```
-
-If you don't have `devtools` installed, you can do the following :
-```r
-install.packages("devtools")
+if (!requireNamespace("remotes", quietly = TRUE))
+    install.packages("remotes")
+remotes::install_github("LBMC/wormRef", build_vignettes = T)
 ```
 
 <hr>
@@ -21,6 +17,8 @@ install.packages("devtools")
  - Built a function factory to simplify ref. building code
  - Added reference metadata to comply with RAPToR v1.2 update.
  - Added time range/unit info in list_refs 
+ - Added an aging reference (`Cel_aging_1`)
+ 
 ### v0.4
  - Added Meeuse et al. (2020) reference spanning L1 to adult development
 
@@ -28,6 +26,7 @@ install.packages("devtools")
 #### v0.3.1
  - Fixed plot_refs not diplaying
  - Removed doc typos
+ 
 #### v0.3.0
  - Updated reference parameters with RAPToR bug fix
  - Changed all RPKM to TPM
